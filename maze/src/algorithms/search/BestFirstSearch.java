@@ -6,6 +6,7 @@ import java.util.PriorityQueue;
 /**
  *Best-first search is a search algorithm which explores a graph by expanding the most promising node chosen according to a specified rule.
  */
+//adir change
 public class BestFirstSearch extends BreadthFirstSearch {
 
     public String getName() { return "Best First Search"; }
