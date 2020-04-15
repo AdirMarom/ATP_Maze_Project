@@ -118,6 +118,36 @@ public class Maze {
         return true;
     }
 
+    /**
+     * index 0-4 row number
+     * index 5-9 column number
+     *index 10-14 start index row
+     * index 15-19 start index column
+     * index 20-24 end index row
+     * index 25-30 end index row
+     * 31-end compress matrix
+     * @return
+     */
+    public byte[] toByteArray(){
+        int[] maze_parameter={this.NumOfRows,this.NumOfColumns,this.start_position.getRowIndex(),this.start_position.getColumnIndex(),this.end_position.getRowIndex(),this.end_position.getColumnIndex()};
+        byte[] arr=new byte[this.NumOfRows*this.NumOfColumns+30];
+        int res,sum,i;
+        byte carry;
+        for(int j=0 ;j<6;j++) {
+            res=maze_parameter[j]/255;
+            sum=res*255;
+            carry = (byte)(getNumOfRows()-sum);
+/*            for ( i <= res; i++) {
+                if (i == res)
+                    arr[i] = carry;
+                else
+                    arr[i] = (byte) 255;
+            }
+            i+=5;*/
+        }
+        return arr;
+    }
+
     public void print2() {
         for(int i = 0; i < this.TheMaze.length; ++i) {
             for(int j = 0; j < this.TheMaze[i].length; ++j) {
