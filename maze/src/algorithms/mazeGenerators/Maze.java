@@ -1,5 +1,8 @@
 package algorithms.mazeGenerators;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * maze class bild from matrix of integer
  * every cell of this maze is a Position object contain x,y index
@@ -124,28 +127,108 @@ public class Maze {
      *index 10-14 start index row
      * index 15-19 start index column
      * index 20-24 end index row
-     * index 25-30 end index row
-     * 31-end compress matrix
-     * @return
+     * index 25-29 end index column
+     * 30-end compress matrix
+     * @return byte array
      */
     public byte[] toByteArray(){
         int[] maze_parameter={this.NumOfRows,this.NumOfColumns,this.start_position.getRowIndex(),this.start_position.getColumnIndex(),this.end_position.getRowIndex(),this.end_position.getColumnIndex()};
-        byte[] arr=new byte[this.NumOfRows*this.NumOfColumns+30];
-        int res,sum,i;
-        byte carry;
-        for(int j=0 ;j<6;j++) {
-            res=maze_parameter[j]/255;
-            sum=res*255;
-            carry = (byte)(getNumOfRows()-sum);
-/*            for ( i <= res; i++) {
-                if (i == res)
-                    arr[i] = carry;
-                else
-                    arr[i] = (byte) 255;
+        List<Byte> compress_Maze_D=new ArrayList<Byte>();
+        set_Maze_compress_param(maze_parameter,compress_Maze_D);
+        set_Maze_compress_value(this.TheMaze,compress_Maze_D);
+        byte[] compress_Maze_S=new byte[compress_Maze_D.size()];
+        for (int i=0 ;i<compress_Maze_D.size();i++){
+            compress_Maze_S[i]=compress_Maze_D.get(i);
+        }
+        return compress_Maze_S;
+    }
+
+    /**
+     * start the compresss from value zero
+     * intdex 30-end compress maze
+     * @param Maze_matrix 1-wall 0-pass
+     * @param compress_Maze_D 011100 -->[1,3,2] start
+     */
+    private  void set_Maze_compress_value(int[][] Maze_matrix ,List<Byte> compress_Maze_D){
+        int[] Maze_in_array=convert_2d_to_1d(Maze_matrix);
+        boolean zero_flag=true;
+        int Maze_size=Maze_in_array.length;
+        int counter=0;
+        int sum;
+        int index=30;
+        while(counter<Maze_size){
+            if(zero_flag){
+                sum=0;
+                while(counter<Maze_size && Maze_in_array[counter]==0 ){
+                    if(sum<256)
+                        sum++;
+                    else{
+                        compress_Maze_D.add(index,(byte)255);
+                        sum=0;
+                        index++;
+                    }
+                    counter++;
+                }
+                compress_Maze_D.add(index,(byte)sum);
+                index++;
+                zero_flag=false;
             }
-            i+=5;*/
+            else{
+                sum=0;
+                while(counter<Maze_size && Maze_in_array[counter]==1){
+                    if(sum<256)
+                        sum++;
+                    else{
+                        compress_Maze_D.add(index,(byte)255);
+                        sum=0;
+                        index++;
+                    }
+                    counter++;
+                }
+                compress_Maze_D.add(index,(byte)sum);
+                index++;
+                zero_flag=true;
+            }
+        }
+    }
+
+    /**
+     *
+     * @param matrix 2D int array
+     * @return 1D array all the matrix in one int[]
+     */
+    private  int[] convert_2d_to_1d(int[][] matrix){
+        int k=0;
+        int[] arr=new int[matrix.length*matrix[0].length];
+        for(int i=0 ;i<matrix.length;i++){
+            for(int j=0 ;j<matrix[0].length;j++){
+                arr[k++]=matrix[i][j];
+            }
         }
         return arr;
+    }
+
+    /**
+     *
+     * @param maze_parameter row number,column number,start index row,start index column,end index row,end index column
+     * @param compress_Maze_D every cell value of number between 0-255
+     */
+    private void set_Maze_compress_param(int[] maze_parameter, List<Byte> compress_Maze_D){
+        int res,i;
+        i=0;
+        for(int j=0 ;j<6;j++) {
+            res = maze_parameter[j];
+            for(int x=0 ;x<5;x++) {
+                if(res<=0)
+                    compress_Maze_D.add(i, (byte) 0);
+                else if (res < 255)
+                    compress_Maze_D.add(i, (byte) res);
+                else if (res >= 255)
+                    compress_Maze_D.add(i, (byte) 255);
+                res -= 255;
+                i++;
+            }
+        }
     }
 
     public void print2() {

@@ -12,9 +12,15 @@ public class Main {
 
 
         AMazeGenerator m1=new MyMazeGenerator();
-        Maze maze1=m1.generate(11,11);
-//CHANGE ON GIT
-        maze1.print2();
+        Maze maze1=m1.generate(3,5);
+        maze1.print();
+        byte[] test=maze1.toByteArray();
+        String s105="";
+        for(int i=0 ;i<test.length;i++){
+           s105+=test[i]+"x";
+        }
+        System.out.println(s105);
+       // maze1.print2();
         for(int i=0 ; i<50 ;i++){
           //  m1.generate(2,4);
             m1.generate(3,2);
@@ -28,9 +34,11 @@ public class Main {
             m1.generate(99,9);
             m1.generate(15,30);
             m1.generate(17,38);
-            m1.generate(11,3);
+            m1.generate(5,3);
 
         }
+
+
 
        maze1.print2();
         DepthFirstSearch D1=new DepthFirstSearch();
