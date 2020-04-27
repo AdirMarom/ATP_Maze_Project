@@ -4,10 +4,7 @@ package algorithms.mazeGenerators;
 
 import jdk.nashorn.internal.ir.Splittable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -33,23 +30,22 @@ public class Maze {
         int end_pos_y=0;
         for(int i=0;i<30;i++){
             if(i<=4)
-                this.NumOfRows+=maze[i];
+                this.NumOfRows+=Byte.toUnsignedInt(maze[i]);
             else if(i>4 && i<=9)
-                this.NumOfColumns+=maze[i];
+                this.NumOfColumns+=Byte.toUnsignedInt(maze[i]);
             else if(i>9 && i<=14)
-                start_pos_x+=maze[i];
+                start_pos_x+=Byte.toUnsignedInt(maze[i]);
             else if(i>14 && i<=19)
-                start_pos_y+=maze[i];
+                start_pos_y+=Byte.toUnsignedInt(maze[i]);
             else if(i>19 && i<=24)
-                end_pos_x+=maze[i];
+                end_pos_x+=Byte.toUnsignedInt(maze[i]);
             else
-                end_pos_y+=maze[i];
+                end_pos_y+=Byte.toUnsignedInt(maze[i]);
         }
         this.start_position=new Position(start_pos_x,start_pos_y);
         this.end_position=new Position(end_pos_x,end_pos_y);
         this.TheMaze=new int[this.NumOfRows][this.NumOfColumns];
-        int maze_length=maze.length;
-        int idx=30;
+        this.TheMaze=convert_1d_to_2d(this.NumOfRows,this.NumOfColumns,maze);
 
 
 
@@ -172,8 +168,21 @@ public class Maze {
      */
     public byte[] toByteArray(){
         int[] maze_parameter={this.NumOfRows,this.NumOfColumns,this.start_position.getRowIndex(),this.start_position.getColumnIndex(),this.end_position.getRowIndex(),this.end_position.getColumnIndex()};
-        List<Byte> compress_Maze_D=new ArrayList<Byte>();
-        set_Maze_compress_param(maze_parameter,compress_Maze_D);
+        byte[] compress_param_D=new byte[30];
+        set_Maze_compress_param(maze_parameter,compress_param_D);
+        byte [] all_data_bytes=new byte[compress_param_D.length+(this.NumOfColumns*this.NumOfRows)];
+        for(int i=0;i<30;i++){
+            all_data_bytes[i]=compress_param_D[i];
+        }
+        int[] matrix=convert_2d_to_1d(this.TheMaze);
+
+        for(int i=30;i<all_data_bytes.length;i++){
+            all_data_bytes[i]=(byte)matrix[i];
+        }
+        return all_data_bytes;
+
+/*
+
         //set_Maze_compress_value(this.TheMaze,compress_Maze_D);
         int[] b=convert_2d_to_1d(this.getTheMaze());
         String s1= Arrays.toString(b);
@@ -181,8 +190,13 @@ public class Maze {
         s2=s2.replace(" ","");
         s2=s2.substring(1);
         s2=s2.substring(0,s2.length()-2);
+        System.out.println(s2);
         String[] str=new String[b.length/8+1];
         str=s2.split("(?<=\\G.{8})");
+
+        String test=fromBinaryStringToBase64(str);
+
+
         String p="22";
         /*
         for(int i=8 ;i<b.length;i=i+8){
@@ -194,12 +208,13 @@ public class Maze {
         }
 */
 
-        System.out.println(s2);
+       // System.out.println(s2);
 //        for(int i=0 ;i<b.length;i++){
 //            if(i>0 && i%8==0)
 //               s1+=" ";
 //            s1+=b[i];
 //        }
+        /*
         byte[] compress_Maze_S=new byte[compress_Maze_D.size()];
         for (int i=0 ;i<compress_Maze_D.size();i++){
             compress_Maze_S[i]=compress_Maze_D.get(i);
@@ -207,6 +222,8 @@ public class Maze {
         String s = fromBinaryStringToBase64(str);
         byte[] res=s.getBytes();
         return res;
+         */
+
     }
 
     public static String fromBinaryStringToBase64(String[] split) {
@@ -288,21 +305,32 @@ public class Maze {
      * @param maze_parameter row number,column number,start index row,start index column,end index row,end index column
      * @param compress_Maze_D every cell value of number between 0-255
      */
-    private void set_Maze_compress_param(int[] maze_parameter, List<Byte> compress_Maze_D){
-        int res,i;
-        i=0;
-        for(int j=0 ;j<6;j++) {
-            res = maze_parameter[j];
-            for(int x=0 ;x<5;x++) {
-                if(res<=0)
-                    compress_Maze_D.add(i, (byte) 0);
-                else if (res < 255)
-                    compress_Maze_D.add(i, (byte) res);
-                else if (res >= 255)
-                    compress_Maze_D.add(i, (byte) 255);
-                res -= 255;
-                i++;
+    private void set_Maze_compress_param(int[] maze_parameter, byte[] compress_Maze_D){
+        int next_idx_to_list=0;
+        for(int i=0;i<maze_parameter.length;i++){
+            int tmp=maze_parameter[i];
+            if(tmp<=255) {
+                compress_Maze_D[next_idx_to_list]=(byte)tmp;
+                next_idx_to_list += 5;
             }
+            else{
+                int iter=0;
+                while (tmp>255){
+                    iter++;
+                    compress_Maze_D[next_idx_to_list]=(byte)255;
+                    tmp-=255;
+                    next_idx_to_list++;
+                }
+                if(tmp>0){
+                    iter++;
+                    compress_Maze_D[next_idx_to_list]=(byte)tmp;
+                    next_idx_to_list++;
+                }
+
+                next_idx_to_list+=(5-iter);
+            }
+
+
         }
     }
 
@@ -325,5 +353,18 @@ public class Maze {
         System.out.println("");
         // System.out.println("\u001b[31m\uD83D\uDC99\uD83D\uDC99\uD83D\uDC99 liad is the qween \uD83E\uDDDC\u200D \uD83D\uDC99\uD83D\uDC99\uD83D\uDC99 \u001b[0m");
         System.out.println();
+    }
+
+
+    int[][] convert_1d_to_2d(int numrows,int numcolumns,byte[] bytes){
+        int[][] matrix=new int[numrows][numcolumns];
+        int idx=30;
+        for(int i=0;i<numrows;i++){
+            for(int j=0;j<numcolumns;j++){
+                matrix[i][j]=Byte.toUnsignedInt(bytes[idx]);
+                idx++;
+            }
+        }
+        return matrix;
     }
 }
