@@ -1,9 +1,5 @@
 package algorithms.mazeGenerators;
-
-
-
 import jdk.nashorn.internal.ir.Splittable;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
@@ -156,9 +152,6 @@ public class Maze {
             return false;
         return true;
     }
-
-
-
 
     /**
      * index 0-4 row number
