@@ -1,7 +1,14 @@
 package algorithms.mazeGenerators;
 
+
+
+import jdk.nashorn.internal.ir.Splittable;
+
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
+
 
 /**
  * maze class bild from matrix of integer
@@ -121,6 +128,9 @@ public class Maze {
         return true;
     }
 
+
+
+
     /**
      * index 0-4 row number
      * index 5-9 column number
@@ -135,12 +145,48 @@ public class Maze {
         int[] maze_parameter={this.NumOfRows,this.NumOfColumns,this.start_position.getRowIndex(),this.start_position.getColumnIndex(),this.end_position.getRowIndex(),this.end_position.getColumnIndex()};
         List<Byte> compress_Maze_D=new ArrayList<Byte>();
         set_Maze_compress_param(maze_parameter,compress_Maze_D);
-        set_Maze_compress_value(this.TheMaze,compress_Maze_D);
+        //set_Maze_compress_value(this.TheMaze,compress_Maze_D);
+        int[] b=convert_2d_to_1d(this.getTheMaze());
+        String s1= Arrays.toString(b);
+        String s2=s1.replace(",","");
+        s2=s2.replace(" ","");
+        s2=s2.substring(1);
+        s2=s2.substring(0,s2.length()-2);
+        String[] str=new String[b.length/8+1];
+        str=s2.split("(?<=\\G.{8})");
+        String p="22";
+        /*
+        for(int i=8 ;i<b.length;i=i+8){
+            if(i+8>=b.length){
+                str[str.length-1]=s2.substring(i,str.length-1);
+            }
+            str[i%8-1]=s2.substring(i-8,i);
+
+        }
+*/
+
+        System.out.println(s2);
+//        for(int i=0 ;i<b.length;i++){
+//            if(i>0 && i%8==0)
+//               s1+=" ";
+//            s1+=b[i];
+//        }
         byte[] compress_Maze_S=new byte[compress_Maze_D.size()];
         for (int i=0 ;i<compress_Maze_D.size();i++){
             compress_Maze_S[i]=compress_Maze_D.get(i);
         }
-        return compress_Maze_S;
+        String s = fromBinaryStringToBase64(str);
+        byte[] res=s.getBytes();
+        return res;
+    }
+
+    public static String fromBinaryStringToBase64(String[] split) {
+       // String[] split = binary.split(" ");
+        byte[] arrayBinary = new byte[split.length];
+        for(int i=0;i<split.length;i++){
+            arrayBinary[i] = (byte)Integer.parseInt(split[i],2);
+        }
+        return Base64.getEncoder().encodeToString(arrayBinary);
     }
 
     /**
