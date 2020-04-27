@@ -12,10 +12,9 @@ public class Main {
 
 
         AMazeGenerator m1=new MyMazeGenerator();
-        Maze maze1=m1.generate(2,2);
-        //maze1.print();
+        Maze maze1=m1.generate(3,5);
+        maze1.print();
         byte[] test=maze1.toByteArray();
-        System.out.println(test.length);
         String s105="";
         for(int i=0 ;i<test.length;i++){
            s105+=test[i]+"x";
@@ -40,7 +39,7 @@ public class Main {
         }
 
 
-/*
+
        maze1.print2();
         DepthFirstSearch D1=new DepthFirstSearch();
         BreadthFirstSearch D2=new BreadthFirstSearch();
@@ -65,7 +64,7 @@ public class Main {
         System.out.println(s3.getSolutionSize());
         System.out.println(s3.getSolutionCost());
         System.out.println(s3.getSolutionPath());
-*/
+
 
     }
 }

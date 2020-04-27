@@ -26,6 +26,35 @@ public class Maze {
 
     public Maze(){}
 
+    public Maze(byte[] maze){
+        int start_pos_x=0;
+        int start_pos_y=0;
+        int end_pos_x=0;
+        int end_pos_y=0;
+        for(int i=0;i<30;i++){
+            if(i<=4)
+                this.NumOfRows+=maze[i];
+            else if(i>4 && i<=9)
+                this.NumOfColumns+=maze[i];
+            else if(i>9 && i<=14)
+                start_pos_x+=maze[i];
+            else if(i>14 && i<=19)
+                start_pos_y+=maze[i];
+            else if(i>19 && i<=24)
+                end_pos_x+=maze[i];
+            else
+                end_pos_y+=maze[i];
+        }
+        this.start_position=new Position(start_pos_x,start_pos_y);
+        this.end_position=new Position(end_pos_x,end_pos_y);
+        this.TheMaze=new int[this.NumOfRows][this.NumOfColumns];
+        int maze_length=maze.length;
+        int idx=30;
+
+
+
+    }
+
     public Maze(int rows,int columns){
 
         this.NumOfRows=rows;
