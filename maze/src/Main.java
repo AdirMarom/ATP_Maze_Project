@@ -1,24 +1,42 @@
+import IO.MyCompressorOutputStream;
 import algorithms.mazeGenerators.AMazeGenerator;
 import algorithms.mazeGenerators.IMazeGenerator;
 import algorithms.mazeGenerators.Maze;
 import algorithms.mazeGenerators.MyMazeGenerator;
 import algorithms.search.*;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+
 public class Main {
 
     public static void main(String[] args) {
         IMazeGenerator m= new MyMazeGenerator();
         //Maze maze=m.generate(4,6);
+        try {
+            AMazeGenerator m2=new MyMazeGenerator();
+            Maze maze12=m2.generate(10,10);
+            OutputStream o=new MyCompressorOutputStream(new FileOutputStream("save.maze")) ;
+            o.write(maze12.toByteArray());
+        } catch (FileNotFoundException e ) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
         AMazeGenerator m1=new MyMazeGenerator();
-        Maze maze1=m1.generate(3,5);
+        Maze maze1=m1.generate(700,700);
         maze1.print();
         byte[] test=maze1.toByteArray();
         String s105="";
         for(int i=0 ;i<test.length;i++){
            s105+=test[i]+"x";
         }
+
+        /*
         System.out.println(s105);
        // maze1.print2();
         for(int i=0 ; i<50 ;i++){
@@ -64,7 +82,7 @@ public class Main {
         System.out.println(s3.getSolutionSize());
         System.out.println(s3.getSolutionCost());
         System.out.println(s3.getSolutionPath());
-
+*/
 
     }
 }
