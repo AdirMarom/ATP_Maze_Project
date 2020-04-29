@@ -1,14 +1,12 @@
 import IO.MyCompressorOutputStream;
+import IO.MyDecompressorInputStream;
 import algorithms.mazeGenerators.AMazeGenerator;
 import algorithms.mazeGenerators.IMazeGenerator;
 import algorithms.mazeGenerators.Maze;
 import algorithms.mazeGenerators.MyMazeGenerator;
 import algorithms.search.*;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 
 public class Main {
 
@@ -20,6 +18,9 @@ public class Main {
             Maze maze12=m2.generate(10,10);
             OutputStream o=new MyCompressorOutputStream(new FileOutputStream("save.maze")) ;
             o.write(maze12.toByteArray());
+            InputStream in=new MyDecompressorInputStream(new FileInputStream("save.maze"));
+            MyCompressorOutputStream o1=(MyCompressorOutputStream)o;
+            in.read((o1.getCompress_object_array()));
         } catch (FileNotFoundException e ) {
             e.printStackTrace();
         } catch (IOException e) {

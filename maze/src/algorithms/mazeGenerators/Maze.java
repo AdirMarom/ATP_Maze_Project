@@ -46,9 +46,6 @@ public class Maze {
         this.end_position=new Position(end_pos_x,end_pos_y);
         this.TheMaze=new int[this.NumOfRows][this.NumOfColumns];
         this.TheMaze=convert_1d_to_2d(this.NumOfRows,this.NumOfColumns,maze);
-
-
-
     }
 
     public Maze(int rows,int columns){
@@ -176,64 +173,16 @@ public class Maze {
         }
         int[] matrix=convert_2d_to_1d(this.TheMaze);
 
+        int j=0;
         for(int i=30;i<all_data_bytes.length;i++){
-            all_data_bytes[i]=(byte)matrix[i];
+            all_data_bytes[i]=(byte)matrix[j++];
         }
         return all_data_bytes;
 
-/*
-
-        //set_Maze_compress_value(this.TheMaze,compress_Maze_D);
-        int[] b=convert_2d_to_1d(this.getTheMaze());
-        String s1= Arrays.toString(b);
-        String s2=s1.replace(",","");
-        s2=s2.replace(" ","");
-        s2=s2.substring(1);
-        s2=s2.substring(0,s2.length()-2);
-        System.out.println(s2);
-        String[] str=new String[b.length/8+1];
-        str=s2.split("(?<=\\G.{8})");
-
-        String test=fromBinaryStringToBase64(str);
-
-
-        String p="22";
-        /*
-        for(int i=8 ;i<b.length;i=i+8){
-            if(i+8>=b.length){
-                str[str.length-1]=s2.substring(i,str.length-1);
-            }
-            str[i%8-1]=s2.substring(i-8,i);
-
-        }
-*/
-
-       // System.out.println(s2);
-//        for(int i=0 ;i<b.length;i++){
-//            if(i>0 && i%8==0)
-//               s1+=" ";
-//            s1+=b[i];
-//        }
-        /*
-        byte[] compress_Maze_S=new byte[compress_Maze_D.size()];
-        for (int i=0 ;i<compress_Maze_D.size();i++){
-            compress_Maze_S[i]=compress_Maze_D.get(i);
-        }
-        String s = fromBinaryStringToBase64(str);
-        byte[] res=s.getBytes();
-        return res;
-         */
 
     }
 
-    public static String fromBinaryStringToBase64(String[] split) {
-       // String[] split = binary.split(" ");
-        byte[] arrayBinary = new byte[split.length];
-        for(int i=0;i<split.length;i++){
-            arrayBinary[i] = (byte)Integer.parseInt(split[i],2);
-        }
-        return Base64.getEncoder().encodeToString(arrayBinary);
-    }
+
 
     /**
      * start the compresss from value zero

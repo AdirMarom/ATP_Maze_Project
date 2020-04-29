@@ -1,31 +1,66 @@
 package IO;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Arrays;
+import java.util.Base64;
 
 public class MyCompressorOutputStream extends OutputStream {
-    OutputStream outputStream;
-    public MyCompressorOutputStream(){
+    private OutputStream out;
+    private byte[] compress_object_array;
+
+    public MyCompressorOutputStream(OutputStream outputStream){
+        this.out=outputStream ;
     }
 
-    public void write(int b){
-
+    public byte[] getCompress_object_array() {
+        return compress_object_array;
     }
 
+    public void write(int b){}
+
+    /**
+     * compress byte value (index 30-end) to base 64
+     * @param bytes uncompress byte[] array
+     */
     public void write(byte[] bytes){
+        System.out.println(Arrays.toString(bytes));
+        //compress parameter;
+        byte[] param_array=Arrays.copyOfRange(bytes,0,30);
 
-        String s1= Arrays.toString(bytes);
-        String s2=s1.replace(",","");
-        s2=s2.replace(" ","");
-        s2=s2.substring(1);
-        s2=s2.substring(0,s2.length()-2);
-        System.out.println(s2);
-        String[] str=new String[bytes.length/8+1];
-        str=s2.split("(?<=\\G.{8})");
-        byte[] byteStrings = str
+        //compress value
+        byte[] value_array=Arrays.copyOfRange(bytes,30,bytes.length);
+        String value_string= Arrays.toString(value_array);
+        value_string=value_string.replace(",","");
+        value_string=value_string.replace(" ","");
+        value_string=value_string.substring(1,value_string.length()-1);
 
+        String[] binary_chunks=value_string.split("(?<=\\G.{8})");
+        byte[] comp =fromBinaryStringToBase64(binary_chunks);
+      ///  System.out.println(fromBinaryStringToBase64(binary_chunks));
+       // System.out.println(Arrays.toString(comp));
+        byte[] result=new byte[param_array.length+comp.length];
 
+        for(int i=0 ;i<result.length ;i++){
+            if(i<30)
+                result[i]=param_array[i];
+            else
+                result[i]=comp[i-30];
+        }
+        this.compress_object_array= result;
+    }
 
-
+    /**
+     *
+     * @param split chunks of 8 binary chunk convert to 1 base64
+     * @return conpress string to string base64
+     */
+    private byte[] fromBinaryStringToBase64(String[] split) {
+        byte[] arrayBinary = new byte[split.length];
+        for(int i=0;i<split.length;i++){
+            arrayBinary[i] = (byte)Integer.parseInt(split[i],2);
+        }
+        return arrayBinary;
+                //Base64.getEncoder().encodeToString(arrayBinary);
     }
 }
