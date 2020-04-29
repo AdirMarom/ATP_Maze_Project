@@ -24,7 +24,6 @@ public class Maze {
     public Maze(){}
 
     public Maze(byte[] maze){
-
         int start_pos_x=0;
         int start_pos_y=0;
         int end_pos_x=0;
@@ -47,6 +46,8 @@ public class Maze {
         this.end_position=new Position(end_pos_x,end_pos_y);
         this.TheMaze=new int[this.NumOfRows][this.NumOfColumns];
         this.TheMaze=convert_1d_to_2d(this.NumOfRows,this.NumOfColumns,maze);
+
+
 
     }
 
@@ -152,6 +153,9 @@ public class Maze {
         return true;
     }
 
+
+
+
     /**
      * index 0-4 row number
      * index 5-9 column number
@@ -171,9 +175,9 @@ public class Maze {
             all_data_bytes[i]=compress_param_D[i];
         }
         int[] matrix=convert_2d_to_1d(this.TheMaze);
-        int j=0;
+
         for(int i=30;i<all_data_bytes.length;i++){
-            all_data_bytes[i]=(byte)matrix[j++];
+            all_data_bytes[i]=(byte)matrix[i];
         }
         return all_data_bytes;
 
@@ -222,7 +226,14 @@ public class Maze {
 
     }
 
-
+    public static String fromBinaryStringToBase64(String[] split) {
+       // String[] split = binary.split(" ");
+        byte[] arrayBinary = new byte[split.length];
+        for(int i=0;i<split.length;i++){
+            arrayBinary[i] = (byte)Integer.parseInt(split[i],2);
+        }
+        return Base64.getEncoder().encodeToString(arrayBinary);
+    }
 
     /**
      * start the compresss from value zero
