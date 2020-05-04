@@ -15,7 +15,7 @@ public class Main {
         //Maze maze=m.generate(4,6);
         try {
             AMazeGenerator m2=new MyMazeGenerator();
-            Maze maze12=m2.generate(10,10);
+            Maze maze12=m2.generate(10,100);
             OutputStream o=new MyCompressorOutputStream(new FileOutputStream("save.maze")) ;
             o.write(maze12.toByteArray());
             InputStream in=new MyDecompressorInputStream(new FileInputStream("save.maze"));
@@ -27,7 +27,7 @@ public class Main {
             e.printStackTrace();
         }
 
-
+/*
         AMazeGenerator m1=new MyMazeGenerator();
         Maze maze1=m1.generate(700,700);
         maze1.print();

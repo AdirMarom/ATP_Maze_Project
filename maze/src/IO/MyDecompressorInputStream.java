@@ -1,5 +1,7 @@
 package IO;
 
+import com.sun.org.apache.bcel.internal.generic.RETURN;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Array;
@@ -7,7 +9,7 @@ import java.util.Arrays;
 
 public class MyDecompressorInputStream extends InputStream {
     private InputStream in;
-    private byte[] Dcomp_array;
+    private int len_matrix;
 
 
     public MyDecompressorInputStream(InputStream inputStream ){
@@ -38,53 +40,31 @@ public class MyDecompressorInputStream extends InputStream {
         }
         return b;
     }
-    public int read(byte[] compress_byte){
 
+    public int read(byte[] D_Compress_result){
+
+        byte[] compress_byte=new byte[D_Compress_result.length];
+
+        try {
+           this.in.read(compress_byte);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
         //compress parameter;
         byte[] param_array=Arrays.copyOfRange(compress_byte,0,30);
-        int len_matrix=get_Dsize(param_array);
-
+        this.len_matrix=get_Dsize(param_array);
 
         //compress value
         byte[] array_value=Arrays.copyOfRange(compress_byte,30,compress_byte.length);
         int[] Unsigh_value=convert_ByteSigh_to_UnSigh(array_value);
 
-        String[] D_to_binary_compress=new String[len_matrix];
-        StringBuilder temp_str=new StringBuilder();
-        int Dcomp_len=0;
-        for (int j=0 ;j<array_value.length;j++){
+        String[] D_to_binary_compress=from_int_to_binary_chunk(Unsigh_value);
 
-            D_to_binary_compress[j]= Integer.toBinaryString(Unsigh_value[j]);
-            temp_str.delete(0,temp_str.capacity());
-            temp_str.append(D_to_binary_compress[j]);
-            Dcomp_len+= D_to_binary_compress[j].length();
-            while (temp_str.length()<8 && Dcomp_len<len_matrix){
-                if(j==(array_value.length-1)){
-                    if(Dcomp_len<len_matrix){
-                        temp_str.insert(0, 0);
-                        Dcomp_len++;
-                        if (temp_str.length() == 8)
-                            D_to_binary_compress[j] = temp_str.toString();
-                    }
-                }
-                else{
-                    temp_str.insert(0, 0);
-                    Dcomp_len++;
-                    if (temp_str.length() == 8)
-                        D_to_binary_compress[j] = temp_str.toString();
-                }
-            }
+        String D_value_string= from_Binary_array_To_string(D_to_binary_compress,1,len_matrix+1);
 
-        }
-        String D_value_string= Arrays.toString(D_to_binary_compress);
-        D_value_string=D_value_string.replace(",","");
-        D_value_string=D_value_string.replace(" ","");
-        D_value_string=D_value_string.substring(1,len_matrix-1);
-        this.Dcomp_array=str_array_to_byte(D_value_string);
-        byte[] res=concatenate(param_array,this.Dcomp_array);
-        this.Dcomp_array=res;
-        System.out.println(Arrays.toString(Dcomp_array));
-        System.out.println(Arrays.toString(Dcomp_array).length());
+         byte[] temp_arr=str_array_to_byte(D_value_string);
+        concatenate(param_array,temp_arr,D_Compress_result);
 
         return 0;
     }
@@ -97,16 +77,60 @@ public class MyDecompressorInputStream extends InputStream {
         return res;
     }
 
-    public byte[] concatenate(byte[] a, byte[] b) {
+    private byte[] concatenate(byte[] a, byte[] b,byte[] res) {
         int aLen = a.length;
         int bLen = b.length;
 
         byte[] c = (byte[]) Array.newInstance(a.getClass().getComponentType(), aLen + bLen);
         System.arraycopy(a, 0, c, 0, aLen);
         System.arraycopy(b, 0, c, aLen, bLen);
+        System.arraycopy(c,0,res,0,res.length);
 
         return c;
     }
 
+    private String from_Binary_array_To_string(String[] arr,int start,int end){
+        String result= Arrays.toString(arr);
+        result=result.replace(",","");
+        result=result.replace(" ","");
+        result=result.substring(start,end);
+        return result;
+    }
 
+    private String[] from_int_to_binary_chunk(int[] number_arr){
+
+        String[] D_to_binary_compress=new String[this.len_matrix];
+        Integer De_len_count=0;
+        for (int j=0 ;j<number_arr.length;j++){
+            D_to_binary_compress[j]= Integer.toBinaryString(number_arr[j]);
+            De_len_count+= D_to_binary_compress[j].length();
+            if(j==number_arr.length-1)
+                D_to_binary_compress[j]=eight_binary_number(D_to_binary_compress[j],De_len_count,true);
+            else
+                D_to_binary_compress[j]=eight_binary_number(D_to_binary_compress[j],De_len_count,false);
+        }
+        return D_to_binary_compress;
+    }
+
+    private String eight_binary_number(String Binary_num,int counter,boolean last){
+
+        StringBuilder temp_str=new StringBuilder();
+        temp_str.append(Binary_num);
+        while (temp_str.length()<8 && counter<this.len_matrix){
+            if(last){
+                temp_str.insert(0, 0);
+                counter++;
+                if (counter==this.len_matrix){
+                    Binary_num= temp_str.toString();
+                }
+            }
+            else{
+                temp_str.insert(0, 0);
+                counter++;
+                if (temp_str.length() == 8)
+                    Binary_num=temp_str.toString();
+            }
+        }
+        return Binary_num;
+    }
 }

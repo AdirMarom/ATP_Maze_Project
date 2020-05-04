@@ -49,6 +49,11 @@ public class MyCompressorOutputStream extends OutputStream {
                 result[i]=comp[i-30];
         }
         this.compress_object_array= result;
+        try {
+            this.out.write(result);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
