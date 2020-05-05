@@ -24,8 +24,10 @@ public class MyCompressorOutputStream extends OutputStream {
      * @param bytes uncompress byte[] array
      */
     public void write(byte[] bytes){
-        System.out.println(Arrays.toString(bytes));
-        System.out.println(Arrays.toString(bytes).length());
+
+        if(bytes==null)
+            return;
+
         //compress parameter;
         byte[] param_array=Arrays.copyOfRange(bytes,0,30);
 
@@ -38,8 +40,6 @@ public class MyCompressorOutputStream extends OutputStream {
 
         String[] binary_chunks=value_string.split("(?<=\\G.{8})");
         byte[] comp =fromBinaryStringToBase64(binary_chunks);
-      ///  System.out.println(fromBinaryStringToBase64(binary_chunks));
-       // System.out.println(Arrays.toString(comp));
         byte[] result=new byte[param_array.length+comp.length];
 
         for(int i=0 ;i<result.length ;i++){

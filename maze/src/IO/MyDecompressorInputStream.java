@@ -43,14 +43,18 @@ public class MyDecompressorInputStream extends InputStream {
 
     public int read(byte[] D_Compress_result){
 
-        byte[] compress_byte=new byte[D_Compress_result.length];
+        if(D_Compress_result==null)
+            return 0;
 
+        byte[] compress_byte = new byte[0];
         try {
+           compress_byte=new byte[this.in.available()];
            this.in.read(compress_byte);
         }
         catch (IOException e) {
             e.printStackTrace();
         }
+
         //compress parameter;
         byte[] param_array=Arrays.copyOfRange(compress_byte,0,30);
         this.len_matrix=get_Dsize(param_array);
@@ -66,7 +70,7 @@ public class MyDecompressorInputStream extends InputStream {
          byte[] temp_arr=str_array_to_byte(D_value_string);
         concatenate(param_array,temp_arr,D_Compress_result);
 
-        return 0;
+        return 1;
     }
 
     private int[] convert_ByteSigh_to_UnSigh(byte[] arr){
@@ -112,7 +116,7 @@ public class MyDecompressorInputStream extends InputStream {
         return D_to_binary_compress;
     }
 
-    private String eight_binary_number(String Binary_num,int counter,boolean last){
+    private String eight_binary_number(String Binary_num,Integer counter,boolean last){
 
         StringBuilder temp_str=new StringBuilder();
         temp_str.append(Binary_num);
@@ -121,7 +125,7 @@ public class MyDecompressorInputStream extends InputStream {
                 temp_str.insert(0, 0);
                 counter++;
                 if (counter==this.len_matrix){
-                    Binary_num= temp_str.toString();
+                    Binary_num=temp_str.toString();
                 }
             }
             else{

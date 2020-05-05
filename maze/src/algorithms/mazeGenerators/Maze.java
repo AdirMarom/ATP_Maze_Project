@@ -23,29 +23,32 @@ public class Maze {
 
     public Maze(){}
 
-    public Maze(byte[] maze){
+    public Maze(byte[] maze_byte){
+
+        if(maze_byte==null)
+            return;
         int start_pos_x=0;
         int start_pos_y=0;
         int end_pos_x=0;
         int end_pos_y=0;
         for(int i=0;i<30;i++){
             if(i<=4)
-                this.NumOfRows+=Byte.toUnsignedInt(maze[i]);
+                this.NumOfRows+=Byte.toUnsignedInt(maze_byte[i]);
             else if(i>4 && i<=9)
-                this.NumOfColumns+=Byte.toUnsignedInt(maze[i]);
+                this.NumOfColumns+=Byte.toUnsignedInt(maze_byte[i]);
             else if(i>9 && i<=14)
-                start_pos_x+=Byte.toUnsignedInt(maze[i]);
+                start_pos_x+=Byte.toUnsignedInt(maze_byte[i]);
             else if(i>14 && i<=19)
-                start_pos_y+=Byte.toUnsignedInt(maze[i]);
+                start_pos_y+=Byte.toUnsignedInt(maze_byte[i]);
             else if(i>19 && i<=24)
-                end_pos_x+=Byte.toUnsignedInt(maze[i]);
+                end_pos_x+=Byte.toUnsignedInt(maze_byte[i]);
             else
-                end_pos_y+=Byte.toUnsignedInt(maze[i]);
+                end_pos_y+=Byte.toUnsignedInt(maze_byte[i]);
         }
         this.start_position=new Position(start_pos_x,start_pos_y);
         this.end_position=new Position(end_pos_x,end_pos_y);
         this.TheMaze=new int[this.NumOfRows][this.NumOfColumns];
-        this.TheMaze=convert_1d_to_2d(this.NumOfRows,this.NumOfColumns,maze);
+        this.TheMaze=convert_1d_to_2d(this.NumOfRows,this.NumOfColumns,maze_byte);
     }
 
     public Maze(int rows,int columns){
@@ -57,6 +60,12 @@ public class Maze {
         this.end_position=new Position(rows-1,columns-1);
 
     }
+    public boolean equals(Maze Sec_maze){
+        if(Sec_maze==null)
+            return false;
+        return Arrays.equals(this.toByteArray(),Sec_maze.toByteArray());
+    }
+
 
     /**
      * @return Position hold the start index in matrix
