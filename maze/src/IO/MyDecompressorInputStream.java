@@ -10,13 +10,17 @@ import java.util.Arrays;
 public class MyDecompressorInputStream extends InputStream {
     private InputStream in;
     private int len_matrix;
+    private int De_len_count=0;
 
 
     public MyDecompressorInputStream(InputStream inputStream ){
         this.in=inputStream;
     }
 
-    public int read() throws IOException { return 0; }
+    public int read() throws IOException {
+        int res=in.read();
+        return res;
+    }
 
     public int get_Dsize(byte[] param_array){
         int col=0;
@@ -69,7 +73,10 @@ public class MyDecompressorInputStream extends InputStream {
 
          byte[] temp_arr=str_array_to_byte(D_value_string);
         concatenate(param_array,temp_arr,D_Compress_result);
-
+//////
+        float ratio=((float)compress_byte.length/((float)D_Compress_result.length-30));
+        System.out.println("compress ratio :"+(100-ratio*100)+"%");
+///////
         return 1;
     }
 
@@ -104,33 +111,33 @@ public class MyDecompressorInputStream extends InputStream {
     private String[] from_int_to_binary_chunk(int[] number_arr){
 
         String[] D_to_binary_compress=new String[this.len_matrix];
-        Integer De_len_count=0;
+       // Integer De_len_count=0;
         for (int j=0 ;j<number_arr.length;j++){
             D_to_binary_compress[j]= Integer.toBinaryString(number_arr[j]);
             De_len_count+= D_to_binary_compress[j].length();
             if(j==number_arr.length-1)
-                D_to_binary_compress[j]=eight_binary_number(D_to_binary_compress[j],De_len_count,true);
+                D_to_binary_compress[j]=eight_binary_number(D_to_binary_compress[j],true);
             else
-                D_to_binary_compress[j]=eight_binary_number(D_to_binary_compress[j],De_len_count,false);
+                D_to_binary_compress[j]=eight_binary_number(D_to_binary_compress[j],false);
         }
         return D_to_binary_compress;
     }
 
-    private String eight_binary_number(String Binary_num,Integer counter,boolean last){
+    private String eight_binary_number(String Binary_num,boolean last){
 
         StringBuilder temp_str=new StringBuilder();
         temp_str.append(Binary_num);
-        while (temp_str.length()<8 && counter<this.len_matrix){
+        while (temp_str.length()<8 && De_len_count<this.len_matrix){
             if(last){
                 temp_str.insert(0, 0);
-                counter++;
-                if (counter==this.len_matrix){
+                De_len_count++;
+                if (De_len_count==this.len_matrix){
                     Binary_num=temp_str.toString();
                 }
             }
             else{
                 temp_str.insert(0, 0);
-                counter++;
+                De_len_count++;
                 if (temp_str.length() == 8)
                     Binary_num=temp_str.toString();
             }
