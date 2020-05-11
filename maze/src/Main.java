@@ -1,5 +1,6 @@
 import IO.MyCompressorOutputStream;
 import IO.MyDecompressorInputStream;
+import Server.*;
 import algorithms.mazeGenerators.AMazeGenerator;
 import algorithms.mazeGenerators.IMazeGenerator;
 import algorithms.mazeGenerators.Maze;
@@ -11,6 +12,29 @@ import java.io.*;
 public class Main {
 
     public static void main(String[] args) {
+
+
+
+        Server server=new Server(5400,1000,new ServerStrategyGenerateMaze());
+
+        server.start();
+        int[] mazeDimension={7,7};
+        try{
+            OutputStream out = new MyCompressorOutputStream(new FileOutputStream("kkk"));
+            InputStream out = new InputStream(new FileOutputStream("kkk")) {
+                @Override
+                public int read() throws IOException {
+                    return 0;
+                }
+            };
+        }
+        catch (IOException e){}
+
+
+
+
+
+
         IMazeGenerator m= new MyMazeGenerator();
         //Maze maze=m.generate(4,6);
         try {
@@ -26,6 +50,7 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
 
 /*
         AMazeGenerator m1=new MyMazeGenerator();
@@ -84,6 +109,7 @@ public class Main {
         System.out.println(s3.getSolutionCost());
         System.out.println(s3.getSolutionPath());
 */
+
 
     }
 }
