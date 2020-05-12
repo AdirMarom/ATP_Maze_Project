@@ -1,3 +1,4 @@
+import Client.Client;
 import IO.MyCompressorOutputStream;
 import IO.MyDecompressorInputStream;
 import Server.*;
@@ -16,6 +17,8 @@ public class Main {
 
 
         Server server=new Server(5400,1000,new ServerStrategyGenerateMaze());
+
+       // Client client=new Client();
 /*
         server.start();
         int[] mazeDimension={7,7};

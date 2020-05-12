@@ -1,6 +1,7 @@
 package IO;
 
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.Base64;
@@ -17,7 +18,13 @@ public class MyCompressorOutputStream extends OutputStream {
         return compress_object_array;
     }
 
-    public void write(int b){}
+    public void write(int b){
+        try {
+            out.write(b);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * compress byte value (index 30-end) to base 64
@@ -51,6 +58,8 @@ public class MyCompressorOutputStream extends OutputStream {
         this.compress_object_array= result;
         try {
             this.out.write(result);
+            ObjectOutputStream c=(ObjectOutputStream)out;
+            c.writeObject(result);
         } catch (IOException e) {
             e.printStackTrace();
         }

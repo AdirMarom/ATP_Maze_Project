@@ -8,31 +8,39 @@ import java.net.Socket;
 
 public class Server {
     private int port;//The port
-    private IServerStrategy serverStrategy;//The strategy for handling clients
+    private IServerStrategy iserverStrategy;//The strategy for handling clients
     private volatile boolean stop;
     int timeOut;
+    public static void main(String[] args) throws IOException {
+
+
+    }
 
     public Server(int port,int timeOut, IServerStrategy serverStrategy) {
         this.port = port;
-        this.serverStrategy = serverStrategy;
+        this.iserverStrategy = serverStrategy;
         this.stop = false;
         this.timeOut=timeOut;
     }
 
-    public void start()
-    {
+    private void serverStart(){
         try {
             ServerSocket serverSocket = new ServerSocket(port);
-            serverSocket.setSoTimeout(this.timeOut);
-
+            serverSocket.setSoTimeout(1000);
             while (!stop)
             {
                 try {
                     Socket clientSocket = serverSocket.accept();
 
-                    new Thread(() -> {
-                        clientHandle(clientSocket);
-                    }).start();
+                    InputStream inFromClient = clientSocket.getInputStream();
+                    OutputStream outToClient = clientSocket.getOutputStream();
+
+                    this.iserverStrategy.serverStrategy(inFromClient, outToClient);
+                    System.out.println("5");
+
+                    inFromClient.close();
+                    outToClient.close();
+                    clientSocket.close();
                 }
                 catch (IOException e) {
                     System.out.println("Where are the clients??");
@@ -41,6 +49,22 @@ public class Server {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+    }
+
+    public void start()
+    {
+
+        new Thread(() -> {
+            serverStart();
+        }).start();
+
+    }
+
+    public void stop()
+    {
+        System.out.println("The server has stopped!");
+        this.stop = true;
     }
 
     /**
@@ -51,7 +75,7 @@ public class Server {
         try {
             InputStream inFromClient = clientSocket.getInputStream();
             OutputStream outToClient = clientSocket.getOutputStream();
-            this.serverStrategy.serverStrategy(inFromClient, outToClient);
+            this.iserverStrategy.serverStrategy(inFromClient, outToClient);
 
             inFromClient.close();
             outToClient.close();
@@ -60,11 +84,5 @@ public class Server {
             e.printStackTrace();
         }
     }
-    public void stop()
-    {
-        this.stop = true;
-    }
-
-
 
 }
