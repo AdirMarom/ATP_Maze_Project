@@ -65,14 +65,14 @@ public class MyCompressorOutputStream extends OutputStream {
         byte[] arrayBinary = new byte[split.length];
         for(int i=0;i<split.length;i++){
             arrayBinary[i] = (byte)Integer.parseInt(split[i],2);
-           // temp_arr[i]=(byte)Byte.toUnsignedInt(arrayBinary[i]);
+            // temp_arr[i]=(byte)Byte.toUnsignedInt(arrayBinary[i]);
             //arrayBinary[i]=convertToUnsigh(temp_arr[i]);
-          //  if(arrayBinary[i]<0)
+            //  if(arrayBinary[i]<0)
             //    arrayBinary[i]=(byte)(arrayBinary[i]+255);
             //arrayBinary[i]= (byte) (temp_arr[i] & 0xFF);
         }
         return arrayBinary;
-                //Base64.getEncoder().encodeToString(arrayBinary);
+        //Base64.getEncoder().encodeToString(arrayBinary);
     }
 
 }

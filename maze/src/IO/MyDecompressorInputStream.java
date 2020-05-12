@@ -17,10 +17,7 @@ public class MyDecompressorInputStream extends InputStream {
         this.in=inputStream;
     }
 
-    public int read() throws IOException {
-        int res=in.read();
-        return res;
-    }
+    public int read() throws IOException {return this.in.read();}
 
     public int get_Dsize(byte[] param_array){
         int col=0;
@@ -52,8 +49,8 @@ public class MyDecompressorInputStream extends InputStream {
 
         byte[] compress_byte = new byte[0];
         try {
-           compress_byte=new byte[this.in.available()];
-           this.in.read(compress_byte);
+            compress_byte=new byte[this.in.available()];
+            this.in.read(compress_byte);
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -71,12 +68,10 @@ public class MyDecompressorInputStream extends InputStream {
 
         String D_value_string= from_Binary_array_To_string(D_to_binary_compress,1,len_matrix+1);
 
-         byte[] temp_arr=str_array_to_byte(D_value_string);
+        byte[] temp_arr=str_array_to_byte(D_value_string);
         concatenate(param_array,temp_arr,D_Compress_result);
-//////
-        float ratio=((float)compress_byte.length/((float)D_Compress_result.length-30));
-        System.out.println("compress ratio :"+(100-ratio*100)+"%");
-///////
+        
+
         return 1;
     }
 
@@ -111,7 +106,6 @@ public class MyDecompressorInputStream extends InputStream {
     private String[] from_int_to_binary_chunk(int[] number_arr){
 
         String[] D_to_binary_compress=new String[this.len_matrix];
-       // Integer De_len_count=0;
         for (int j=0 ;j<number_arr.length;j++){
             D_to_binary_compress[j]= Integer.toBinaryString(number_arr[j]);
             De_len_count+= D_to_binary_compress[j].length();

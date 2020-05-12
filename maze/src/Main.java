@@ -16,12 +16,12 @@ public class Main {
 
 
         Server server=new Server(5400,1000,new ServerStrategyGenerateMaze());
-
+/*
         server.start();
         int[] mazeDimension={7,7};
         try{
             OutputStream out = new MyCompressorOutputStream(new FileOutputStream("kkk"));
-            InputStream out = new InputStream(new FileOutputStream("kkk")) {
+           // InputStream out = new InputStream(new FileOutputStream("kkk")) {
                 @Override
                 public int read() throws IOException {
                     return 0;
@@ -30,7 +30,7 @@ public class Main {
         }
         catch (IOException e){}
 
-
+*/
 
 
 
