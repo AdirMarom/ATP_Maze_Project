@@ -1,11 +1,13 @@
 package Server;
 
 import IO.MyCompressorOutputStream;
-import IO.MyDecompressorInputStream;
 import algorithms.mazeGenerators.Maze;
 import algorithms.mazeGenerators.MyMazeGenerator;
 
 import java.io.*;
+
+
+
 
 public class ServerStrategyGenerateMaze implements IServerStrategy {
     public ServerStrategyGenerateMaze(){}
@@ -23,9 +25,14 @@ public class ServerStrategyGenerateMaze implements IServerStrategy {
            col=arr2[1];
            Maze M=my.generate(row,col);
            byte[] arr_byte=M.toByteArray();
-           OutputStream out = new MyCompressorOutputStream(toClient);
-           out.write(arr_byte);
-           toClient.flush();
+
+           OutputStream in = new MyCompressorOutputStream(toClient);
+           in.write(arr_byte);
+           in.flush();
+           in.close();
+
+
+
 
 
        } catch (IOException | ClassNotFoundException e) {

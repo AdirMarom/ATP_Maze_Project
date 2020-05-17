@@ -2,12 +2,13 @@ package algorithms.search;
 ///just for print
 import algorithms.mazeGenerators.Maze;
 ////
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  *
  */
-public class Solution {
+public class Solution implements Serializable {
 
     private ArrayList<AState> path_solution;
    private ArrayList<MazeState> sol_for_debbage;

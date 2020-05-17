@@ -4,6 +4,7 @@ package algorithms.mazeGenerators;
 
 import jdk.nashorn.internal.ir.Splittable;
 
+import java.io.Serializable;
 import java.util.*;
 
 
@@ -14,7 +15,8 @@ import java.util.*;
  * 0-pass
  */
 
-public class Maze {
+public class Maze implements Serializable {
+
     private int NumOfRows;
     private int NumOfColumns;
     private int[][] TheMaze;

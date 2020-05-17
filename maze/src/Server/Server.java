@@ -36,7 +36,6 @@ public class Server {
                     OutputStream outToClient = clientSocket.getOutputStream();
 
                     this.iserverStrategy.serverStrategy(inFromClient, outToClient);
-                    System.out.println("5");
 
                     inFromClient.close();
                     outToClient.close();

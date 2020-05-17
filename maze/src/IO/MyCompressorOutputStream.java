@@ -57,7 +57,7 @@ public class MyCompressorOutputStream extends OutputStream {
         }
         this.compress_object_array= result;
         try {
-            this.out.write(result);
+          //  this.out.write(result);
             ObjectOutputStream c=(ObjectOutputStream)out;
             c.writeObject(result);
         } catch (IOException e) {

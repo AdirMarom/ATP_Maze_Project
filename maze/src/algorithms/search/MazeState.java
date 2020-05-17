@@ -1,10 +1,12 @@
 package algorithms.search;
 import algorithms.mazeGenerators.Position;
 
+import java.io.Serializable;
+
 /**
  * maze position ,contain row index and column index
  */
-public class MazeState extends AState {
+public class MazeState extends AState implements Serializable {
 
     private int x;
     private int y;
@@ -47,9 +49,10 @@ public class MazeState extends AState {
      */
     public void print(){ System.out.println("{"+this.x+" , "+this.y+"}"); }
 
-
-
-
+    @Override
+    public String toString() {
+        return "{"+this.x+" , "+this.y+"}";
+    }
 }
 
 

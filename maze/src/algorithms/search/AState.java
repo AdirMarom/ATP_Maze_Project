@@ -94,6 +94,6 @@ public abstract class AState {
      *representation of state we use the representation of child;
      * @return
      */
-    public String toString(){ return this.state; }
+   // public String toString(){ return this.state.toString(); }
 
 }
