@@ -11,8 +11,9 @@ public class MyDecompressorInputStream extends InputStream {
     private InputStream in;
     private int len_matrix;
     private int De_len_count=0;
+    private int Decompress_actual_size;
 
-
+    private void set_actual_size(int size){this.Decompress_actual_size=size;}
     public MyDecompressorInputStream(InputStream inputStream ){
         this.in=inputStream;
     }
@@ -69,6 +70,7 @@ public class MyDecompressorInputStream extends InputStream {
         String D_value_string= from_Binary_array_To_string(D_to_binary_compress,1,len_matrix+1);
 
         byte[] temp_arr=str_array_to_byte(D_value_string);
+        set_actual_size(30+this.len_matrix);
         concatenate(param_array,temp_arr,D_Compress_result);
 
 
@@ -90,7 +92,7 @@ public class MyDecompressorInputStream extends InputStream {
         byte[] c = (byte[]) Array.newInstance(a.getClass().getComponentType(), aLen + bLen);
         System.arraycopy(a, 0, c, 0, aLen);
         System.arraycopy(b, 0, c, aLen, bLen);
-        System.arraycopy(c,0,res,0,res.length);
+        System.arraycopy(c,0,res,0,this.Decompress_actual_size);
 
         return c;
     }

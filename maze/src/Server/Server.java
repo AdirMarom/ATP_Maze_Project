@@ -1,5 +1,7 @@
 package Server;
 
+import algorithms.search.ISearchingAlgorithm;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -11,10 +13,8 @@ public class Server {
     private IServerStrategy iserverStrategy;//The strategy for handling clients
     private volatile boolean stop;
     int timeOut;
-    public static void main(String[] args) throws IOException {
 
-
-    }
+    public static void main(String[] args) throws IOException {}
 
     public Server(int port,int timeOut, IServerStrategy serverStrategy) {
         this.port = port;
@@ -24,6 +24,10 @@ public class Server {
     }
 
     private void serverStart(){
+        ISearchingAlgorithm s=Configurations.getISearchingAlgorithm();
+        int x=Configurations.GetThreadNumber();
+        String y=Configurations.numOfThreads();
+
         try {
             ServerSocket serverSocket = new ServerSocket(port);
             serverSocket.setSoTimeout(1000);

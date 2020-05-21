@@ -31,19 +31,10 @@ public class ServerStrategyGenerateMaze implements IServerStrategy {
            in.flush();
            in.close();
 
-
-
-
-
        } catch (IOException | ClassNotFoundException e) {
            e.printStackTrace();
        }
 
-       /*
-       BufferedReader fromClient = new BufferedReader(new InputStreamReader(inFromClient));
-       PrintWriter Toclient=new PrintWriter(outToClient);*/
-
-       String pharse="    vbdfhfdgf";
 
 
 

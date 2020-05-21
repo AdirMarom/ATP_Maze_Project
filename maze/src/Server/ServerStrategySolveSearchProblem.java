@@ -11,11 +11,15 @@ import java.util.Objects;
 public class ServerStrategySolveSearchProblem implements IServerStrategy{
     private Maze myMaze;
     private Solution mySol;
+    private ISearchingAlgorithm SearchAlgorithm;
+    private int MaxThread;
 
     public ServerStrategySolveSearchProblem(){
         super();
         this.myMaze=new Maze();
         this.mySol=null;
+        this.SearchAlgorithm=Configurations.getISearchingAlgorithm();
+        this.MaxThread=Configurations.GetThreadNumber();
 
     }
 
@@ -95,8 +99,6 @@ public class ServerStrategySolveSearchProblem implements IServerStrategy{
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
 
     public void serverStrategy(InputStream inFromClient, OutputStream outToClient){
@@ -125,8 +127,7 @@ public class ServerStrategySolveSearchProblem implements IServerStrategy{
             else{
 
                 ISearchable Smaze=new SearchableMaze(this.myMaze) ;
-                ISearchingAlgorithm bestTest=new BreadthFirstSearch();
-                this.mySol=bestTest.solve(Smaze);
+                this.mySol=SearchAlgorithm.solve(Smaze);
                 if(this.mySol==null)
                     System.out.println("this solution is null ");
 
