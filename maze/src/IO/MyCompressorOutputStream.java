@@ -27,7 +27,7 @@ public class MyCompressorOutputStream extends OutputStream {
     }
 
     /**
-     * compress byte value (index 30-end) to base 64
+     * compress byte value (index 24-end) to base 64
      * @param bytes uncompress byte[] array
      */
     public void write(byte[] bytes){
@@ -36,10 +36,10 @@ public class MyCompressorOutputStream extends OutputStream {
             return;
 
         //compress parameter;
-        byte[] param_array=Arrays.copyOfRange(bytes,0,30);
+        byte[] param_array=Arrays.copyOfRange(bytes,0,24);
 
         //compress value
-        byte[] value_array=Arrays.copyOfRange(bytes,30,bytes.length);
+        byte[] value_array=Arrays.copyOfRange(bytes,24,bytes.length);
         String value_string= Arrays.toString(value_array);
         value_string=value_string.replace(",","");
         value_string=value_string.replace(" ","");
@@ -50,16 +50,22 @@ public class MyCompressorOutputStream extends OutputStream {
         byte[] result=new byte[param_array.length+comp.length];
 
         for(int i=0 ;i<result.length ;i++){
-            if(i<30)
+            if(i<24)
                 result[i]=param_array[i];
             else
-                result[i]=comp[i-30];
+                result[i]=comp[i-24];
         }
         this.compress_object_array= result;
         try {
-          //  this.out.write(result);
-            ObjectOutputStream c=(ObjectOutputStream)out;
-            c.writeObject(result);
+
+            if(this.out instanceof ObjectOutputStream){
+                ObjectOutputStream c=(ObjectOutputStream)out;
+                c.writeObject(result);
+            }
+            else{
+                this.out.write(result);
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }

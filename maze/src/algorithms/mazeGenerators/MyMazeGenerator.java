@@ -16,7 +16,7 @@ public class MyMazeGenerator extends AMazeGenerator {
      * @param columns
      * @return return maze object in size (row X columns)
      */
-    public Maze generate(int rows,int columns) {
+    public  Maze generate(int rows,int columns) {
         if(rows<2 ||columns <2)
             return null;
 

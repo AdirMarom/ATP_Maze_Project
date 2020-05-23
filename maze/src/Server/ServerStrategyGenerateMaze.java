@@ -6,13 +6,10 @@ import algorithms.mazeGenerators.MyMazeGenerator;
 
 import java.io.*;
 
-
-
-
-public class ServerStrategyGenerateMaze implements IServerStrategy {
+public class ServerStrategyGenerateMaze implements IServerStrategy{
     public ServerStrategyGenerateMaze(){}
 
-   public void serverStrategy(InputStream inFromClient, OutputStream outToClient){
+   public  void serverStrategy(InputStream inFromClient, OutputStream outToClient){
        int[] arr2;
        int row;
        int col;
@@ -20,31 +17,24 @@ public class ServerStrategyGenerateMaze implements IServerStrategy {
        try {
            ObjectOutputStream toClient = new ObjectOutputStream(outToClient);
            ObjectInputStream fromClient = new ObjectInputStream(inFromClient);
-           arr2=(int[])fromClient.readObject();
-           row=arr2[0];
-           col=arr2[1];
-           Maze M=my.generate(row,col);
-           byte[] arr_byte=M.toByteArray();
 
-           OutputStream in = new MyCompressorOutputStream(toClient);
-           in.write(arr_byte);
-           in.flush();
-           in.close();
+               arr2 = (int[]) fromClient.readObject();
+               row=arr2[0];
+               col=arr2[1];
+               byte[] arr_byte;
+               Maze M=my.generate(row,col);
+               arr_byte=M.toByteArray();
+               OutputStream in = new MyCompressorOutputStream(toClient);
+               in.write(arr_byte);
+               in.flush();
+               in.close();
+
 
        } catch (IOException | ClassNotFoundException e) {
            e.printStackTrace();
        }
 
-
-
-
-
-
-
-
-
-
-
     }
+
 
 }

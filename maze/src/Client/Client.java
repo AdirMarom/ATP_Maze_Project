@@ -15,17 +15,17 @@ public class Client {
         this.port = port;
         this.clientStrategy = strategy;
 
-    }
-
-
+}
 
     public void start(InetAddress serverIP, int port)
     {
         try {
             Socket socket = new Socket(serverIP,port);
             System.out.println("Client is connected to server!");
-            Thread.sleep(1000);
+           Thread.sleep(1000);
             clientStrategy.clientStrategy(socket.getInputStream(),socket.getOutputStream());
+
+
             socket.close();
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();

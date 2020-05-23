@@ -12,14 +12,12 @@ public class ServerStrategySolveSearchProblem implements IServerStrategy{
     private Maze myMaze;
     private Solution mySol;
     private ISearchingAlgorithm SearchAlgorithm;
-    private int MaxThread;
 
     public ServerStrategySolveSearchProblem(){
         super();
         this.myMaze=new Maze();
         this.mySol=null;
         this.SearchAlgorithm=Configurations.getISearchingAlgorithm();
-        this.MaxThread=Configurations.GetThreadNumber();
 
     }
 

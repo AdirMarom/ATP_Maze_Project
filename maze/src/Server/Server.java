@@ -8,26 +8,34 @@ import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+
+
 public class Server {
     private int port;//The port
     private IServerStrategy iserverStrategy;//The strategy for handling clients
     private volatile boolean stop;
     int timeOut;
-
-    public static void main(String[] args) throws IOException {}
+    protected ExecutorService threadPoolExecutor;
 
     public Server(int port,int timeOut, IServerStrategy serverStrategy) {
         this.port = port;
         this.iserverStrategy = serverStrategy;
         this.stop = false;
         this.timeOut=timeOut;
+        threadPoolExecutor = Executors.newFixedThreadPool(Configurations.GetThreadNumber());
     }
 
-    private void serverStart(){
-        ISearchingAlgorithm s=Configurations.getISearchingAlgorithm();
-        int x=Configurations.GetThreadNumber();
-        String y=Configurations.numOfThreads();
+    public void start(){
+        new Thread(() -> {
+            start_server();
+        }).start();
+    }
 
+    public void start_server()
+    {
         try {
             ServerSocket serverSocket = new ServerSocket(port);
             serverSocket.setSoTimeout(1000);
@@ -35,33 +43,19 @@ public class Server {
             {
                 try {
                     Socket clientSocket = serverSocket.accept();
-
-                    InputStream inFromClient = clientSocket.getInputStream();
-                    OutputStream outToClient = clientSocket.getOutputStream();
-
-                    this.iserverStrategy.serverStrategy(inFromClient, outToClient);
-
-                    inFromClient.close();
-                    outToClient.close();
-                    clientSocket.close();
+                    threadPoolExecutor.execute(() ->{
+                        clientHandle(clientSocket);
+                    });
                 }
                 catch (IOException e) {
                     System.out.println("Where are the clients??");
                 }
             }
+            serverSocket.close();
+            threadPoolExecutor.shutdown();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-    }
-
-    public void start()
-    {
-
-        new Thread(() -> {
-            serverStart();
-        }).start();
-
     }
 
     public void stop()
@@ -78,7 +72,10 @@ public class Server {
         try {
             InputStream inFromClient = clientSocket.getInputStream();
             OutputStream outToClient = clientSocket.getOutputStream();
-            this.iserverStrategy.serverStrategy(inFromClient, outToClient);
+            synchronized (this){
+                this.iserverStrategy.serverStrategy(inFromClient, outToClient);
+            }
+
 
             inFromClient.close();
             outToClient.close();
@@ -88,4 +85,8 @@ public class Server {
         }
     }
 
+
+   // public void run() {
+
+    //}
 }

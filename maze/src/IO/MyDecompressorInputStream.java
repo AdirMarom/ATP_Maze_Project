@@ -1,7 +1,5 @@
 package IO;
 
-import com.sun.org.apache.bcel.internal.generic.RETURN;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Array;
@@ -20,13 +18,13 @@ public class MyDecompressorInputStream extends InputStream {
 
     public int read() throws IOException {return this.in.read();}
 
-    public int get_Dsize(byte[] param_array){
+    public int get_demention(byte[] param_array){
         int col=0;
         int row=0;
-        for(int i=0;i<10;i++) {
-            if (i <= 4)
+        for(int i=0;i<8;i++) {
+            if (i <= 3)
                 row += Byte.toUnsignedInt(param_array[i]);
-            else if (i > 4 && i <= 9)
+            else if (i > 3 && i <= 7)
                 col += Byte.toUnsignedInt(param_array[i]);
         }
         int len_matrix=row*col;
@@ -58,11 +56,11 @@ public class MyDecompressorInputStream extends InputStream {
         }
 
         //compress parameter;
-        byte[] param_array=Arrays.copyOfRange(compress_byte,0,30);
-        this.len_matrix=get_Dsize(param_array);
+        byte[] param_array=Arrays.copyOfRange(compress_byte,0,24);
+        this.len_matrix= get_demention(param_array);
 
         //compress value
-        byte[] array_value=Arrays.copyOfRange(compress_byte,30,compress_byte.length);
+        byte[] array_value=Arrays.copyOfRange(compress_byte,24,compress_byte.length);
         int[] Unsigh_value=convert_ByteSigh_to_UnSigh(array_value);
 
         String[] D_to_binary_compress=from_int_to_binary_chunk(Unsigh_value);
@@ -70,7 +68,7 @@ public class MyDecompressorInputStream extends InputStream {
         String D_value_string= from_Binary_array_To_string(D_to_binary_compress,1,len_matrix+1);
 
         byte[] temp_arr=str_array_to_byte(D_value_string);
-        set_actual_size(30+this.len_matrix);
+        set_actual_size(24+this.len_matrix);
         concatenate(param_array,temp_arr,D_Compress_result);
 
 

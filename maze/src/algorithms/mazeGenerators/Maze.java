@@ -3,6 +3,7 @@ package algorithms.mazeGenerators;
 
 
 import jdk.nashorn.internal.ir.Splittable;
+import sun.awt.Mutex;
 
 import java.io.Serializable;
 import java.util.*;
@@ -25,33 +26,33 @@ public class Maze implements Serializable {
 
     public Maze(){}
 
-    public Maze(byte[] maze_byte){
+    public  Maze(byte[] maze_byte){
 
-        if(maze_byte==null)
-            return;
-        int start_pos_x=0;
-        int start_pos_y=0;
-        int end_pos_x=0;
-        int end_pos_y=0;
-        for(int i=0;i<30;i++){
-            if(i<=4)
-                this.NumOfRows+=Byte.toUnsignedInt(maze_byte[i]);
-            else if(i>4 && i<=9)
-                this.NumOfColumns+=Byte.toUnsignedInt(maze_byte[i]);
-            else if(i>9 && i<=14)
-                start_pos_x+=Byte.toUnsignedInt(maze_byte[i]);
-            else if(i>14 && i<=19)
-                start_pos_y+=Byte.toUnsignedInt(maze_byte[i]);
-            else if(i>19 && i<=24)
-                end_pos_x+=Byte.toUnsignedInt(maze_byte[i]);
-            else
-                end_pos_y+=Byte.toUnsignedInt(maze_byte[i]);
+            if (maze_byte == null)
+                return;
+            int start_pos_x = 0;
+            int start_pos_y = 0;
+            int end_pos_x = 0;
+            int end_pos_y = 0;
+            for (int i = 0; i < 24; i++) {
+                if (i <= 3)
+                    this.NumOfRows += Byte.toUnsignedInt(maze_byte[i]);
+                else if (i > 3 && i <= 7)
+                    this.NumOfColumns += Byte.toUnsignedInt(maze_byte[i]);
+                else if (i > 7 && i <= 11)
+                    start_pos_x += Byte.toUnsignedInt(maze_byte[i]);
+                else if (i > 11 && i <= 15)
+                    start_pos_y += Byte.toUnsignedInt(maze_byte[i]);
+                else if (i > 15 && i <= 19)
+                    end_pos_x += Byte.toUnsignedInt(maze_byte[i]);
+                else
+                    end_pos_y += Byte.toUnsignedInt(maze_byte[i]);
+            }
+            this.start_position = new Position(start_pos_x, start_pos_y);
+            this.end_position = new Position(end_pos_x, end_pos_y);
+            this.TheMaze = new int[this.NumOfRows][this.NumOfColumns];
+            this.TheMaze = convert_1d_to_2d(this.NumOfRows, this.NumOfColumns, maze_byte);
         }
-        this.start_position=new Position(start_pos_x,start_pos_y);
-        this.end_position=new Position(end_pos_x,end_pos_y);
-        this.TheMaze=new int[this.NumOfRows][this.NumOfColumns];
-        this.TheMaze=convert_1d_to_2d(this.NumOfRows,this.NumOfColumns,maze_byte);
-    }
 
     public Maze(int rows,int columns){
 
@@ -161,9 +162,6 @@ public class Maze implements Serializable {
         return true;
     }
 
-
-
-
     /**
      * index 0-4 row number
      * index 5-9 column number
@@ -176,16 +174,16 @@ public class Maze implements Serializable {
      */
     public byte[] toByteArray(){
         int[] maze_parameter={this.NumOfRows,this.NumOfColumns,this.start_position.getRowIndex(),this.start_position.getColumnIndex(),this.end_position.getRowIndex(),this.end_position.getColumnIndex()};
-        byte[] compress_param_D=new byte[30];
+        byte[] compress_param_D=new byte[24];
         set_Maze_compress_param(maze_parameter,compress_param_D);
         byte [] all_data_bytes=new byte[compress_param_D.length+(this.NumOfColumns*this.NumOfRows)];
-        for(int i=0;i<30;i++){
+        for(int i=0;i<24;i++){
             all_data_bytes[i]=compress_param_D[i];
         }
         int[] matrix=convert_2d_to_1d(this.TheMaze);
 
         int j=0;
-        for(int i=30;i<all_data_bytes.length;i++){
+        for(int i=24;i<all_data_bytes.length;i++){
             all_data_bytes[i]=(byte)matrix[j++];
         }
         return all_data_bytes;
@@ -271,7 +269,7 @@ public class Maze implements Serializable {
             int tmp=maze_parameter[i];
             if(tmp<=255) {
                 compress_Maze_D[next_idx_to_list]=(byte)tmp;
-                next_idx_to_list += 5;
+                next_idx_to_list += 4;
             }
             else{
                 int iter=0;
@@ -287,7 +285,7 @@ public class Maze implements Serializable {
                     next_idx_to_list++;
                 }
 
-                next_idx_to_list+=(5-iter);
+                next_idx_to_list+=(4-iter);
             }
 
 
@@ -295,30 +293,28 @@ public class Maze implements Serializable {
     }
 
     public void print2() {
-        for(int i = 0; i < this.TheMaze.length; ++i) {
-            for(int j = 0; j < this.TheMaze[i].length; ++j) {
-                if (i == this.start_position.getRowIndex() && j == this.start_position.getColumnIndex()) {
-                    System.out.print(" \u001b[46m"+"S");
-                } else if (i == this.end_position.getRowIndex() && j == this.end_position.getColumnIndex()) {
-                    System.out.print(" \u001b[46m"+"E");
-                } else if (this.TheMaze[i][j] == 1) {
-                    System.out.print(" \u001b[43m ");
-                } else {
-                    System.out.print(" \u001b[40m ");
+
+            for (int i = 0; i < this.TheMaze.length; ++i) {
+                for (int j = 0; j < this.TheMaze[i].length; ++j) {
+                    if (i == this.start_position.getRowIndex() && j == this.start_position.getColumnIndex()) {
+                        System.out.print(" \u001b[46m" + "S");
+                    } else if (i == this.end_position.getRowIndex() && j == this.end_position.getColumnIndex()) {
+                        System.out.print(" \u001b[46m" + "E");
+                    } else if (this.TheMaze[i][j] == 1) {
+                        System.out.print(" \u001b[43m ");
+                    } else {
+                        System.out.print(" \u001b[40m ");
+                    }
                 }
+                System.out.println(" \u001b[107m");
             }
+            System.out.println("");
+            System.out.println();
 
-            System.out.println(" \u001b[107m");
-        }
-        System.out.println("");
-        // System.out.println("\u001b[31m\uD83D\uDC99\uD83D\uDC99\uD83D\uDC99 liad is the qween \uD83E\uDDDC\u200D \uD83D\uDC99\uD83D\uDC99\uD83D\uDC99 \u001b[0m");
-        System.out.println();
     }
-
-
     int[][] convert_1d_to_2d(int numrows,int numcolumns,byte[] bytes){
         int[][] matrix=new int[numrows][numcolumns];
-        int idx=30;
+        int idx=24;
         for(int i=0;i<numrows;i++){
             for(int j=0;j<numcolumns;j++){
                 matrix[i][j]=Byte.toUnsignedInt(bytes[idx]);

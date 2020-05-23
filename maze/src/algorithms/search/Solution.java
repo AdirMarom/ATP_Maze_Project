@@ -1,7 +1,10 @@
 package algorithms.search;
+/*
 ///just for print
 import algorithms.mazeGenerators.Maze;
 ////
+*/
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -62,7 +65,7 @@ public class Solution implements Serializable {
 
 
     }
-
+/*
     public void print_toDebug(Maze M){
 
         convert();
@@ -94,6 +97,6 @@ public class Solution implements Serializable {
         System.out.println("");
         System.out.println();
     }
-
+*/
 
 }
