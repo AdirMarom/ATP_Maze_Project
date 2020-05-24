@@ -5,20 +5,41 @@ import java.io.InputStream;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 
+
+/**
+ * decoding compress byte array.
+ */
 public class MyDecompressorInputStream extends InputStream {
     private InputStream in;
     private int len_matrix;
     private int De_len_count=0;
     private int Decompress_actual_size;
 
+    /**
+     *set size of decompress array
+     * @param size
+     */
     private void set_actual_size(int size){this.Decompress_actual_size=size;}
-    public MyDecompressorInputStream(InputStream inputStream ){
-        this.in=inputStream;
-    }
 
+    /**
+     *constructor
+     * @param inputStream object type
+     */
+    public MyDecompressorInputStream(InputStream inputStream ){this.in=inputStream;}
+
+    /**
+     *
+     * @return override function;
+     * @throws IOException
+     */
     public int read() throws IOException {return this.in.read();}
 
-    public int get_demention(byte[] param_array){
+    /**
+     *get compress row and column
+     * @param param_array
+     * @return matrix dimension
+     */
+    public int get_dimension(byte[] param_array){
         int col=0;
         int row=0;
         for(int i=0;i<8;i++) {
@@ -31,7 +52,13 @@ public class MyDecompressorInputStream extends InputStream {
         return len_matrix;
     }
 
+    /**
+     *take binary number in string convert every number (0 / 1) to byte  cell
+     * @param s-
+     * @return
+     */
     public byte[] str_array_to_byte(String s){
+
         byte[] b=new byte[s.length()];
         int[] temp=new int[s.length()];
         for(int i=0 ;i<s.length() ;i++){
@@ -41,6 +68,11 @@ public class MyDecompressorInputStream extends InputStream {
         return b;
     }
 
+    /**
+     * read compress byte fill empty array in decompress value
+     * @param D_Compress_result empty byte array
+     * @return
+     */
     public int read(byte[] D_Compress_result){
 
         if(D_Compress_result==null)
@@ -57,7 +89,7 @@ public class MyDecompressorInputStream extends InputStream {
 
         //compress parameter;
         byte[] param_array=Arrays.copyOfRange(compress_byte,0,24);
-        this.len_matrix= get_demention(param_array);
+        this.len_matrix= get_dimension(param_array);
 
         //compress value
         byte[] array_value=Arrays.copyOfRange(compress_byte,24,compress_byte.length);
@@ -70,11 +102,14 @@ public class MyDecompressorInputStream extends InputStream {
         byte[] temp_arr=str_array_to_byte(D_value_string);
         set_actual_size(24+this.len_matrix);
         concatenate(param_array,temp_arr,D_Compress_result);
-
-
         return 1;
     }
 
+    /**
+     *
+     * @param arr byte sigh array
+     * @return unsigh int<256
+     */
     private int[] convert_ByteSigh_to_UnSigh(byte[] arr){
         int[] res=new int[arr.length];
         for(int i=0 ;i<arr.length;i++){
@@ -83,6 +118,13 @@ public class MyDecompressorInputStream extends InputStream {
         return res;
     }
 
+    /**
+     *concatenate a and b array to res array
+     * @param a
+     * @param b
+     * @param res
+     * @return res array= a + b
+     */
     private byte[] concatenate(byte[] a, byte[] b,byte[] res) {
         int aLen = a.length;
         int bLen = b.length;
@@ -95,6 +137,13 @@ public class MyDecompressorInputStream extends InputStream {
         return c;
     }
 
+    /**
+     *
+     * @param arr
+     * @param start
+     * @param end
+     * @return
+     */
     private String from_Binary_array_To_string(String[] arr,int start,int end){
         String result= Arrays.toString(arr);
         result=result.replace(",","");
@@ -103,6 +152,11 @@ public class MyDecompressorInputStream extends InputStream {
         return result;
     }
 
+    /**
+     *
+     * @param number_arr
+     * @return string of 8 number in binary base in every cell
+     */
     private String[] from_int_to_binary_chunk(int[] number_arr){
 
         String[] D_to_binary_compress=new String[this.len_matrix];
@@ -117,6 +171,12 @@ public class MyDecompressorInputStream extends InputStream {
         return D_to_binary_compress;
     }
 
+    /**
+     *
+     * @param Binary_num
+     * @param last
+     * @return binary number 8 digit
+     */
     private String eight_binary_number(String Binary_num,boolean last){
 
         StringBuilder temp_str=new StringBuilder();

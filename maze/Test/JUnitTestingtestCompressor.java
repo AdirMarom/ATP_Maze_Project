@@ -70,7 +70,6 @@ class JUnitTestingtestCompressor {
          }
          assertEquals(T,areMazesEquals,"Maze failure in reconstruction byte array");
          Maze RE_build_maze=new Maze(loadedMaze.toByteArray());
-         RE_build_maze.print2();
          assertFalse(!RE_build_maze.equals(all_option_maze[0]),"Maze failure to create Maze from compress byte[]");
     }
 
@@ -88,7 +87,6 @@ class JUnitTestingtestCompressor {
         }
         assertEquals(T,areMazesEquals,"Maze failure in reconstruction byte array");
         Maze RE_build_maze=new Maze(loadedMaze.toByteArray());
-        RE_build_maze.print2();
         assertFalse(!RE_build_maze.equals(all_option_maze[1]),"Maze failure to create Maze from compress byte[]");
 
     }
@@ -108,7 +106,6 @@ class JUnitTestingtestCompressor {
         }
         assertEquals(T,areMazesEquals,"Maze failure in reconstruction byte array");
         Maze RE_build_maze=new Maze(loadedMaze.toByteArray());
-        RE_build_maze.print2();
         assertFalse(!RE_build_maze.equals(all_option_maze[2]),"Maze failure to create Maze from compress byte[]");
     }
 
@@ -144,7 +141,6 @@ class JUnitTestingtestCompressor {
         }
         assertEquals(T,areMazesEquals,"Maze failure in reconstruction byte array");
         Maze RE_build_maze=new Maze(loadedMaze.toByteArray());
-        RE_build_maze.print2();
         assertFalse(!RE_build_maze.equals(option_maze),"Maze failure to create Maze from compress byte[]");
     }
 
@@ -166,7 +162,6 @@ class JUnitTestingtestCompressor {
         }
         assertEquals(T,areMazesEquals,"Maze failure in reconstruction byte array");
         Maze RE_build_maze=new Maze(loadedMaze.toByteArray());
-        RE_build_maze.print2();
         assertFalse(!RE_build_maze.equals(option_maze),"Maze failure to create Maze from compress byte[]");
     }
 
@@ -188,7 +183,6 @@ class JUnitTestingtestCompressor {
         }
         assertEquals(T,areMazesEquals,"Maze failure in reconstruction byte array");
         Maze RE_build_maze=new Maze(loadedMaze.toByteArray());
-        RE_build_maze.print2();
         assertFalse(!RE_build_maze.equals(option_maze),"Maze failure to create Maze from compress byte[]");
     }
 
@@ -210,7 +204,6 @@ class JUnitTestingtestCompressor {
         }
         assertEquals(T,areMazesEquals,"Maze failure in reconstruction byte array");
         Maze RE_build_maze=new Maze(loadedMaze.toByteArray());
-        RE_build_maze.print2();
         assertFalse(!RE_build_maze.equals(option_maze),"Maze failure to create Maze from compress byte[]");
     }
 
@@ -232,7 +225,6 @@ class JUnitTestingtestCompressor {
         }
         assertEquals(T,areMazesEquals,"Maze failure in reconstruction byte array");
         Maze RE_build_maze=new Maze(loadedMaze.toByteArray());
-        RE_build_maze.print2();
         assertFalse(!RE_build_maze.equals(option_maze),"Maze failure to create Maze from compress byte[]");
     }
 
@@ -254,7 +246,6 @@ class JUnitTestingtestCompressor {
         }
         assertEquals(T,areMazesEquals,"Maze failure in reconstruction byte array");
         Maze RE_build_maze=new Maze(loadedMaze.toByteArray());
-        RE_build_maze.print2();
         assertFalse(!RE_build_maze.equals(option_maze),"Maze failure to create Maze from compress byte[]");
     }
 
@@ -276,7 +267,6 @@ class JUnitTestingtestCompressor {
         }
         assertEquals(T,areMazesEquals,"Maze failure in reconstruction byte array");
         Maze RE_build_maze=new Maze(loadedMaze.toByteArray());
-       RE_build_maze.print2();
         assertFalse(!RE_build_maze.equals(option_maze),"Maze failure to create Maze from compress byte[]");;
     }
 
@@ -298,7 +288,6 @@ class JUnitTestingtestCompressor {
         }
         assertEquals(T,areMazesEquals,"Maze failure in reconstruction byte array");
         Maze RE_build_maze=new Maze(loadedMaze.toByteArray());
-        RE_build_maze.print2();
         assertFalse(!RE_build_maze.equals(option_maze),"Maze failure to create Maze from compress byte[]");
     }
 
@@ -320,7 +309,6 @@ class JUnitTestingtestCompressor {
         }
         assertEquals(T,areMazesEquals,"Maze failure in reconstruction byte array");
         Maze RE_build_maze=new Maze(loadedMaze.toByteArray());
-        RE_build_maze.print2();
         assertFalse(!RE_build_maze.equals(option_maze),"Maze failure to create Maze from compress byte[]");
     }
 

@@ -6,18 +6,25 @@ import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.Base64;
 
+/**
+ * compress byte array to base 64
+ */
+
 public class MyCompressorOutputStream extends OutputStream {
     private OutputStream out;
-    private byte[] compress_object_array;
 
+    /**
+     *
+     * @param outputStream
+     */
     public MyCompressorOutputStream(OutputStream outputStream){
         this.out=outputStream ;
     }
 
-    public byte[] getCompress_object_array() {
-        return compress_object_array;
-    }
-
+    /**
+     ** override function
+     * @param b
+     */
     public void write(int b){
         try {
             out.write(b);
@@ -55,7 +62,6 @@ public class MyCompressorOutputStream extends OutputStream {
             else
                 result[i]=comp[i-24];
         }
-        this.compress_object_array= result;
         try {
 
             if(this.out instanceof ObjectOutputStream){
@@ -80,14 +86,9 @@ public class MyCompressorOutputStream extends OutputStream {
         byte[] arrayBinary = new byte[split.length];
         for(int i=0;i<split.length;i++){
             arrayBinary[i] = (byte)Integer.parseInt(split[i],2);
-            // temp_arr[i]=(byte)Byte.toUnsignedInt(arrayBinary[i]);
-            //arrayBinary[i]=convertToUnsigh(temp_arr[i]);
-            //  if(arrayBinary[i]<0)
-            //    arrayBinary[i]=(byte)(arrayBinary[i]+255);
-            //arrayBinary[i]= (byte) (temp_arr[i] & 0xFF);
         }
         return arrayBinary;
-        //Base64.getEncoder().encodeToString(arrayBinary);
+
     }
 
 }

@@ -26,7 +26,11 @@ public class Maze implements Serializable {
 
     public Maze(){}
 
-    public  Maze(byte[] maze_byte){
+    /**
+     * constructor for rebuild compress maze
+     * @param maze_byte
+     */
+    public Maze(byte[] maze_byte){
 
             if (maze_byte == null)
                 return;
@@ -63,6 +67,13 @@ public class Maze implements Serializable {
         this.end_position=new Position(rows-1,columns-1);
 
     }
+
+
+    /**
+     * first maze == secand maze <==> byte_array_2==byte_array_1
+     * @param Sec_maze
+     * @return
+     */
     public boolean equals(Maze Sec_maze){
         if(Sec_maze==null)
             return false;
@@ -163,13 +174,13 @@ public class Maze implements Serializable {
     }
 
     /**
-     * index 0-4 row number
-     * index 5-9 column number
-     *index 10-14 start index row
-     * index 15-19 start index column
-     * index 20-24 end index row
-     * index 25-29 end index column
-     * 30-end compress matrix
+     * index 0-3 row number
+     * index 4-7 column number
+     *index 8-11 start index row
+     * index 12-15 start index column
+     * index 16-19 end index row
+     * index 20-24 end index column
+     * 25-end compress matrix
      * @return byte array
      */
     public byte[] toByteArray(){
@@ -191,56 +202,6 @@ public class Maze implements Serializable {
 
     }
 
-
-
-    /**
-     * start the compresss from value zero
-     * intdex 30-end compress maze
-     * @param Maze_matrix 1-wall 0-pass
-     * @param compress_Maze_D 011100 -->[1,3,2] start
-     */
-    private  void set_Maze_compress_value(int[][] Maze_matrix ,List<Byte> compress_Maze_D){
-        int[] Maze_in_array=convert_2d_to_1d(Maze_matrix);
-        boolean zero_flag=true;
-        int Maze_size=Maze_in_array.length;
-        int counter=0;
-        int sum;
-        int index=30;
-        while(counter<Maze_size){
-            if(zero_flag){
-                sum=0;
-                while(counter<Maze_size && Maze_in_array[counter]==0 ){
-                    if(sum<256)
-                        sum++;
-                    else{
-                        compress_Maze_D.add(index,(byte)255);
-                        sum=0;
-                        index++;
-                    }
-                    counter++;
-                }
-                compress_Maze_D.add(index,(byte)sum);
-                index++;
-                zero_flag=false;
-            }
-            else{
-                sum=0;
-                while(counter<Maze_size && Maze_in_array[counter]==1){
-                    if(sum<256)
-                        sum++;
-                    else{
-                        compress_Maze_D.add(index,(byte)255);
-                        sum=0;
-                        index++;
-                    }
-                    counter++;
-                }
-                compress_Maze_D.add(index,(byte)sum);
-                index++;
-                zero_flag=true;
-            }
-        }
-    }
 
     /**
      *
@@ -312,6 +273,14 @@ public class Maze implements Serializable {
             System.out.println();
 
     }
+
+    /**
+     * convert 1d byte_array to 2d int[][]
+     * @param numrows
+     * @param numcolumns
+     * @param bytes
+     * @return
+     */
     int[][] convert_1d_to_2d(int numrows,int numcolumns,byte[] bytes){
         int[][] matrix=new int[numrows][numcolumns];
         int idx=24;
