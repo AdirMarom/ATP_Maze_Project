@@ -2,6 +2,7 @@ package ViewModel;
 
 import Model.IModel;
 import Model.Model;
+import algorithms.search.Solution;
 import javafx.scene.input.KeyCode;
 
 import java.util.Observable;
@@ -23,6 +24,10 @@ public class ViewModel extends Observable implements Observer {
         }
     }
 
+    public Solution getSolution(){return this.model.GenerateSolution();}
+
+    public void generateSolution(){this.model.GenerateSolution();}
+
     public void generateMaze(int row ,int col){this.model.GenerateMaze(row,col);}
 
     public int[][] getMaze(){return model.getMaze();}
@@ -33,5 +38,5 @@ public class ViewModel extends Observable implements Observer {
 
     public int getCharacterPositionRow() {return this.model.getCharacterPositionRow();}
 
-    public int getCharacterPositionColumn() { return this.model.getCharacterPositionCol();}
+    public int getCharacterPositionColumn() {return this.model.getCharacterPositionCol();}
 }

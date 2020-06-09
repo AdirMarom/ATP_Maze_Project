@@ -59,6 +59,17 @@ public class MyViewController implements Observer,IView {
         keyEvent.consume();
 
     }
+    public void generateSolution(){
+        if(!mazeDisplay.getSolutionFlag()){
+            viewModel.generateSolution();
+            mazeDisplay.setSolution(viewModel.getSolution());
+        }
+        mazeDisplay.switch_Solution_status();
+
+
+    }
+
+
     public void generateMaze() {
         int heigth = Integer.valueOf(txtfld_rowsNum.getText());
         int width = Integer.valueOf(txtfld_columnsNum.getText());

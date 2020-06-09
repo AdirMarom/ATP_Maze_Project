@@ -1,10 +1,14 @@
 .root{
-    -fx-background-color: darkseagreen  ;
+    -fx-background-color: darkseagreen;
 }
+
+
+
+
 
 Button {
     -fx-text-fill: white;
-    -fx-font-family: "Arial Narrow";
+    -fx-font-family: "Game of Thrones";
     -fx-font-weight: bold;
     -fx-background-color:linear-gradient(#61a2b2, #2A5058);
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
@@ -19,3 +23,18 @@ Button:hover{
     -fx-alignment: CENTER;
     -fx-content-display: LEFT;
 }
+@font-face {
+
+    font-family:'Game of Thrones';
+    src: url("src/resources/Game_of_Thrones.ttf");
+}
+
+.Label {
+    -fx-font-family: "Game of Thrones";
+
+}
+
+
+
+
+

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import View.*?>
-<?import javafx.scene.*?>
+<?import java.lang.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.effect.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#KeyPressed" prefHeight="400.0" prefWidth="762.0" stylesheets="@MainStyle.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.MyViewController">
    <top>
@@ -33,12 +33,13 @@
       </VBox>
    </top>
    <left>
-      <VBox prefHeight="372.0" prefWidth="167.0" BorderPane.alignment="CENTER">
+      <VBox accessibleRole="TEXT" prefHeight="372.0" prefWidth="227.0" BorderPane.alignment="CENTER">
          <children>
             <GridPane>
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -48,32 +49,54 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
                   <Label prefHeight="17.0" prefWidth="45.0" />
-                  <Label layoutX="10.0" layoutY="17.0" prefHeight="17.0" prefWidth="45.0" text="Row" GridPane.rowIndex="1" />
+                  <Label layoutX="10.0" layoutY="17.0" prefHeight="17.0" prefWidth="45.0" styleClass="Label" text="Row" GridPane.rowIndex="1" />
                   <TextField fx:id="txtfld_rowsNum" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <TextField fx:id="txtfld_columnsNum" layoutX="60.0" layoutY="43.0" GridPane.columnIndex="1" />
-                  <Button fx:id="btn_generateMaze" mnemonicParsing="false" onAction="#generateMaze" prefHeight="25.0" prefWidth="100.0" text="Generate" GridPane.columnSpan="2" GridPane.rowIndex="2" />
-                  <Button fx:id="btn_solveMaze" layoutX="60.0" layoutY="73.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="101.0" text="Solution" GridPane.columnSpan="2" GridPane.rowIndex="3" />
-                  <Label layoutX="10.0" layoutY="17.0" prefHeight="17.0" prefWidth="45.0" text="Row_index" GridPane.rowIndex="4" />
-                  <Label layoutX="10.0" layoutY="137.0" prefHeight="17.0" prefWidth="45.0" text="col_index" GridPane.rowIndex="5" />
-                  <Label layoutX="10.0" layoutY="137.0" prefHeight="17.0" prefWidth="45.0" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                  <Label layoutX="10.0" layoutY="17.0" prefHeight="17.0" prefWidth="63.0" text="Col" />
+                  <Button fx:id="btn_generateMaze" mnemonicParsing="false" onAction="#generateMaze" prefHeight="25.0" prefWidth="225.0" text="Generate" GridPane.columnSpan="2" GridPane.rowIndex="3" />
+                  <Button fx:id="btn_solveMaze" layoutX="60.0" layoutY="73.0" mnemonicParsing="false" onAction="#generateSolution" prefHeight="25.0" prefWidth="226.0" text="Solution" GridPane.columnSpan="2" GridPane.rowIndex="4" />
+                  <Label layoutX="10.0" layoutY="137.0" prefHeight="60.0" prefWidth="201.0" styleClass="Label" text="  Game " GridPane.columnSpan="2" GridPane.rowIndex="5" GridPane.rowSpan="2">
+                     <font>
+                        <Font size="21.0" />
+                     </font></Label>
+                  <Label layoutX="10.0" layoutY="17.0" prefHeight="17.0" prefWidth="111.0" styleClass="Label" text="column" />
+                  <Label layoutX="10.0" layoutY="160.0" prefHeight="60.0" prefWidth="201.0" text="  of" GridPane.rowIndex="7">
+                     <font>
+                        <Font size="21.0" />
+                     </font>
+                     <styleClass>
+                        <String fx:value="root" />
+                        <String fx:value="Label" />
+                     </styleClass>
+                  </Label>
+                  <Label layoutX="10.0" layoutY="220.0" prefHeight="60.0" prefWidth="201.0" text="  Maze" GridPane.columnSpan="2" GridPane.rowIndex="8" GridPane.rowSpan="2">
+                     <font>
+                        <Font size="21.0" />
+                     </font>
+                     <styleClass>
+                        <String fx:value="root" />
+                        <String fx:value="Label" />
+                     </styleClass>
+                  </Label>
                </children>
             </GridPane>
          </children>
       </VBox>
    </left>
    <center>
-       <Pane onKeyPressed="#KeyPressed" BorderPane.alignment="CENTER">
+       <Pane onKeyPressed="#KeyPressed" prefHeight="383.0" prefWidth="535.0" BorderPane.alignment="CENTER">
            <children>
-               <MazeDisplay fx:id="mazeDisplay" height="600" imageFileEnd="src/resources/Images/throne.jpg" imageFileNameCharacter="src/resources/Images/X.jpg" imageFileNameWall="src/resources/Images/SOLIDER.jpg" imageFileStart="src/resources/Images/throne.jpg" layoutX="78.0" onKeyPressed="#KeyPressed" width="522.0" />
-            <PerspectiveCamera />
+               <MazeDisplay fx:id="mazeDisplay" height="600" imageFileEnd="src/resources/Images/C_daenerys.png" imageFileNameCharacter="src/resources/Images/X.jpg" imageFileNameWall="src/resources/Images/wall1.jpg" imageFileStart="src/resources/Images/thron.JPG" layoutX="78.0" onKeyPressed="#KeyPressed" width="522.0">
+               <styleClass>
+                  <String fx:value="root" />
+                  <String fx:value="Label" />
+               </styleClass></MazeDisplay>
            </children>
-         <effect>
-            <InnerShadow />
-         </effect>
        </Pane>
    </center>
 </BorderPane>

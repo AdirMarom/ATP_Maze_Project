@@ -2,6 +2,7 @@ package Model;
 
 //import algorithms.mazeGenerators.*;
 import algorithms.mazeGenerators.Position;
+import algorithms.search.Solution;
 import javafx.scene.input.KeyCode;
 
 import java.util.Observable;
@@ -15,6 +16,8 @@ public class Model extends Observable implements IModel {
     private int[][] MatrixMaze;
     private  int numOfRow;
     private  int numOfCol;
+    Server_Operation Server_generator;
+    private Solution solve;
 
     public Model() {
 
@@ -22,7 +25,9 @@ public class Model extends Observable implements IModel {
 
     @Override
     public void GenerateMaze(int Rows, int Column) {
-        this.G_maze=this.generator.generate(Rows,Column);
+        this.Server_generator=new Server_Operation(Rows,Column);
+        this.G_maze=this.Server_generator.Generate_Operate();
+        //this.G_maze=this.generator.generate(Rows,Column);
         this.MatrixMaze=this.G_maze.getTheMaze();
         characterPositionRow=this.G_maze.getStart_position().getRowIndex();
         characterPositionColumn=this.G_maze.getStart_position().getColumnIndex();
@@ -42,6 +47,18 @@ public class Model extends Observable implements IModel {
     public void MoveCharacter(KeyCode Movement) {
 
     }
+
+    public Solution GenerateSolution(){
+        this.solve=this.Server_generator.Solve_operate();
+
+        return this.solve;
+    }
+
+    @Override
+    public Solution getSolution() {
+        return this.solve;
+    }
+
 
     public algorithms.mazeGenerators.Maze getMazeObj(){return this.G_maze;}
 
@@ -122,9 +139,6 @@ public class Model extends Observable implements IModel {
         setChanged();
         notifyObservers();
     }
-
-
-
 
     @Override
     public int getCharacterPositionRow() {

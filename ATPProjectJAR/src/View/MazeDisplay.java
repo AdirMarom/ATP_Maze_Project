@@ -1,11 +1,15 @@
 package View;
 
 
+import algorithms.search.MazeState;
+import algorithms.search.Solution;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
@@ -18,6 +22,13 @@ public class MazeDisplay extends Canvas {
     private StringProperty ImageFileStart = new SimpleStringProperty();
     private StringProperty ImageFileEnd = new SimpleStringProperty();
     private algorithms.mazeGenerators.Maze Maze_obj;
+    private Boolean solution_flag=false;
+    private Solution solution;
+
+
+    public void setSolution(Solution sol){this.solution=sol;}
+
+    public boolean getSolutionFlag(){return this.solution_flag;};
 
     public void setMaze(int[][] maze){
         if(this.Maze_obj==null)
@@ -53,7 +64,8 @@ public class MazeDisplay extends Canvas {
             try {
                 Image wallImage = new Image(new FileInputStream(ImageFileNameWall.get()));
                 Image characterImage = new Image(new FileInputStream(ImageFileNameCharacter.get()));
-
+                Image StartImage = new Image(new FileInputStream(ImageFileStart.get()));
+                Image EndtImage = new Image(new FileInputStream(ImageFileEnd.get()));
                 GraphicsContext gc = getGraphicsContext2D();
                 gc.clearRect(0, 0, getWidth(), getHeight());
 
@@ -62,20 +74,35 @@ public class MazeDisplay extends Canvas {
                     for (int j = 0; j < Maze.length; j++) {
                         if (Maze[j][i] == 1) {
                             //gc.fillRect(i * cellHeight, j * cellWidth, cellHeight, cellWidth);
-                            gc.drawImage(wallImage, i * cellWidth, j * cellHeight, cellWidth,cellHeight);
+                            gc.drawImage(wallImage, i * cellWidth, j * cellHeight, cellWidth, cellHeight);
+                        }
+                        if (this.solution_flag) {
+
+                            for (int x = 0; x < this.solution.getSolutionPath().size(); x++) {
+                                MazeState MazeStep = (MazeState) (this.solution.getSolutionPath().get(x));
+                                if (MazeStep.getRowIndex() == j && MazeStep.getColIndex() == i) {
+                                    gc.setFill(Color.YELLOW);
+                                    gc.fillOval(i * cellWidth, j * cellHeight,cellWidth,cellHeight);
+                                    break;
+                                }
+                            }
                         }
                     }
                 }
 
-                //Draw Character
-                //gc.setFill(Color.RED);
-                //gc.fillOval(characterPositionColumn * cellHeight, characterPositionRow * cellWidth, cellHeight, cellWidth);
-                gc.drawImage(characterImage, characterPositionCol*cellWidth , characterPositionRows * cellHeight,cellWidth,cellHeight);
-            } catch (FileNotFoundException e) {
-                //e.printStackTrace();
+                        //Draw Character
+                        //gc.setFill(Color.RED);
+                        //gc.fillOval(characterPositionColumn * cellHeight, characterPositionRow * cellWidth, cellHeight, cellWidth);
+                        gc.drawImage(StartImage, this.Maze_obj.getStart_position().getColumnIndex() * cellWidth, this.Maze_obj.getStart_position().getRowIndex() * cellHeight, cellWidth, cellHeight);
+                        gc.drawImage(characterImage, characterPositionCol * cellWidth, characterPositionRows * cellHeight, cellWidth, cellHeight);
+                        gc.drawImage(EndtImage, this.Maze_obj.getEnd_position().getColumnIndex() * cellWidth, this.Maze_obj.getEnd_position().getRowIndex() * cellHeight, cellWidth, cellHeight);
+
+                    } catch(FileNotFoundException e){
+                        //e.printStackTrace();
+                    }
+                }
             }
-        }
-    }
+
 
 
 
@@ -151,7 +178,10 @@ public class MazeDisplay extends Canvas {
     }
 
 
-
-
-
+    public void switch_Solution_status(){
+        if(this.solution_flag==true)
+            this.solution_flag=false;
+        else
+            this.solution_flag=true;
+    }
 }

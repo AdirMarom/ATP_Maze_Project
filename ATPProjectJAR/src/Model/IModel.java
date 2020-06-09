@@ -1,5 +1,6 @@
 package Model;
 
+import algorithms.search.Solution;
 import javafx.scene.input.KeyCode;
 
 public interface IModel {
@@ -10,7 +11,8 @@ public interface IModel {
     int getCharacterPositionRow();
     int  getCharacterPositionCol();
     void Close();
-    public algorithms.mazeGenerators.Maze getMazeObj();
-
+    algorithms.mazeGenerators.Maze getMazeObj();
+    Solution GenerateSolution();
+    Solution getSolution();
     void moveCharacter(KeyCode movement);
 }

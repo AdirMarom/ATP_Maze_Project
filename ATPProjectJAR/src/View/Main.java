@@ -8,6 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.util.Optional;
@@ -16,6 +17,8 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
+
+        Font.loadFont(Main.class.getResource("Game_of_Thrones.ttf").toExternalForm(), 12);
 
         //ViewModel -> Model
         Model model = new Model();
@@ -30,6 +33,7 @@ public class Main extends Application {
         Parent root = fxmlLoader.load(getClass().getResource("MyView2.fxml").openStream());
         Scene scene = new Scene(root, 800, 700);
         scene.getStylesheets().add(getClass().getResource("MainStyle.css").toExternalForm());
+
         primaryStage.setScene(scene);
 
         //View -> ViewModel
