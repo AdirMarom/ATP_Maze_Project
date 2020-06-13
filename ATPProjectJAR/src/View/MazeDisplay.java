@@ -21,6 +21,7 @@ public class MazeDisplay extends Canvas {
     private StringProperty ImageFileNameCharacter = new SimpleStringProperty();
     private StringProperty ImageFileStart = new SimpleStringProperty();
     private StringProperty ImageFileEnd = new SimpleStringProperty();
+    private StringProperty ImageFileNameTrail=new SimpleStringProperty();
     private algorithms.mazeGenerators.Maze Maze_obj;
     private Boolean solution_flag=false;
     private Solution solution;
@@ -66,6 +67,7 @@ public class MazeDisplay extends Canvas {
                 Image characterImage = new Image(new FileInputStream(ImageFileNameCharacter.get()));
                 Image StartImage = new Image(new FileInputStream(ImageFileStart.get()));
                 Image EndtImage = new Image(new FileInputStream(ImageFileEnd.get()));
+                Image TrailImage = new Image(new FileInputStream(this.ImageFileNameTrail.get()));
                 GraphicsContext gc = getGraphicsContext2D();
                 gc.clearRect(0, 0, getWidth(), getHeight());
 
@@ -76,6 +78,8 @@ public class MazeDisplay extends Canvas {
                             //gc.fillRect(i * cellHeight, j * cellWidth, cellHeight, cellWidth);
                             gc.drawImage(wallImage, i * cellWidth, j * cellHeight, cellWidth, cellHeight);
                         }
+                        if(Maze[j][i] == 0)
+                            gc.drawImage(TrailImage, i * cellWidth, j * cellHeight, cellWidth, cellHeight);
                         if (this.solution_flag) {
 
                             for (int x = 0; x < this.solution.getSolutionPath().size(); x++) {
@@ -156,6 +160,9 @@ public class MazeDisplay extends Canvas {
     public String getImageFileEnd() {
         return ImageFileEnd.get();
     }
+    public String getImageFileTrail() {
+        return this.ImageFileNameTrail.get();
+    }
 
     public void setImageFileEnd(String imageFileEnd) {
         this.ImageFileEnd.set(imageFileEnd);
@@ -167,6 +174,10 @@ public class MazeDisplay extends Canvas {
 
     public void setImageFileNameWall(String imageFileNameWall) {
         this.ImageFileNameWall.set(imageFileNameWall);
+    }
+
+    public void setImageFileTrail(String imageFileTrail) {
+        this.ImageFileNameTrail.set(imageFileTrail);
     }
 
     public String getImageFileNameCharacter() {
