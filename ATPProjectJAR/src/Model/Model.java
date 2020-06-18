@@ -1,10 +1,13 @@
 package Model;
 
 //import algorithms.mazeGenerators.*;
+import IO.MyDecompressorInputStream;
+import algorithms.mazeGenerators.Maze;
 import algorithms.mazeGenerators.Position;
 import algorithms.search.Solution;
 import javafx.scene.input.KeyCode;
 
+import java.io.*;
 import java.util.Observable;
 
 public class Model extends Observable implements IModel {
@@ -21,6 +24,42 @@ public class Model extends Observable implements IModel {
 
     public Model() {
 
+    }
+
+    public void loadMaze(File f)  {
+
+        FileInputStream loadFile = null;
+        try {
+            loadFile = new FileInputStream(f);
+            ObjectInputStream tmp=new ObjectInputStream(new FileInputStream(f));
+            this.G_maze=(Maze)tmp.readObject();
+            this.MatrixMaze = G_maze.getTheMaze();
+            this.characterPositionColumn = G_maze.getStart_position().getColumnIndex();
+            characterPositionRow = G_maze.getStart_position().getRowIndex();
+            loadFile.close();
+            tmp.close();
+            setChanged();
+            notifyObservers();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void SaveMaze(File f) {
+        if(f==null)
+            return;
+        try {
+
+            new FileWriter(f.getName(), true);
+            ObjectOutputStream buf = new ObjectOutputStream(new FileOutputStream(f.getPath()));
+            buf.writeObject(this.G_maze);
+            buf.flush();
+            buf.close();
+        } catch (IOException var11) {
+            var11.printStackTrace();
+        }
     }
 
     @Override
@@ -138,6 +177,26 @@ public class Model extends Observable implements IModel {
         }
         setChanged();
         notifyObservers();
+    }
+
+    @Override
+    public int get_Start_Row_Pos() {
+        return this.G_maze.getStart_position().getRowIndex();
+    }
+
+    @Override
+    public int get_End_Row_Pos() {
+        return this.G_maze.getEnd_position().getRowIndex();
+    }
+
+    @Override
+    public int get_Start_Col_Pos() {
+        return this.G_maze.getStart_position().getColumnIndex();
+    }
+
+    @Override
+    public int get_End_Col_Pos() {
+        return this.G_maze.getEnd_position().getColumnIndex();
     }
 
     @Override

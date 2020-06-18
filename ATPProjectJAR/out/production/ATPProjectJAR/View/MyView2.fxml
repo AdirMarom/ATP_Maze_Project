@@ -6,36 +6,11 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#KeyPressed" prefHeight="400.0" prefWidth="762.0" stylesheets="@MainStyle.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.MyViewController">
-   <top>
-      <VBox prefHeight="28.0" prefWidth="600.0" BorderPane.alignment="CENTER">
-         <children>
-            <MenuBar>
-              <menus>
-                <Menu mnemonicParsing="false" text="File">
-                  <items>
-                    <MenuItem mnemonicParsing="false" text="Close" />
-                  </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Edit">
-                  <items>
-                    <MenuItem mnemonicParsing="false" text="Delete" />
-                  </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Help">
-                  <items>
-                    <MenuItem mnemonicParsing="false" text="About" />
-                  </items>
-                </Menu>
-              </menus>
-            </MenuBar>
-         </children>
-      </VBox>
-   </top>
+<BorderPane fx:id="myBord" onKeyPressed="#KeyPressed" prefHeight="582.0" prefWidth="766.0" stylesheets="@MainStyle.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.MyViewController">
    <left>
-      <VBox accessibleRole="TEXT" styleClass="Adir" BorderPane.alignment="CENTER">
+      <VBox accessibleRole="TEXT" prefHeight="200.0" prefWidth="270.0" styleClass="Adir" BorderPane.alignment="CENTER">
          <children>
-            <GridPane>
+            <GridPane prefHeight="444.0" prefWidth="300.0">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -80,15 +55,58 @@
          </children>
       </VBox>
    </left>
+   <top>
+      <MenuBar prefHeight="28.0" prefWidth="762.0" BorderPane.alignment="CENTER">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem mnemonicParsing="true" onAction="#ClearMaze" text="New" />
+                  <MenuItem mnemonicParsing="false" onAction="#saveMaze" text="Save" />
+                  <MenuItem mnemonicParsing="false" onAction="#loadMaze" text="Load" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Options">
+            <items>
+              <MenuItem fx:id="btn_properties" mnemonicParsing="false" onAction="#ShowProperties" text="Properties" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="About" />
+            <Menu mnemonicParsing="false" text="Help">
+               <items>
+              <MenuItem mnemonicParsing="false" onAction="#help" text="information" />
+               </items></Menu>
+            <Menu mnemonicParsing="false" text="Exit">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#exit" text="Exit" />
+               </items>
+            </Menu>
+        </menus>
+      </MenuBar>
+   </top>
    <center>
-       <Pane onKeyPressed="#KeyPressed" prefHeight="383.0" prefWidth="535.0" BorderPane.alignment="CENTER">
-           <children>
-               <MazeDisplay fx:id="mazeDisplay" height="600" imageFileTrail="src/resources/Images/wall3.jpg" imageFileEnd="src/resources/Images/end.jpeg" imageFileNameCharacter="src/resources/Images/2.png" imageFileNameWall="src/resources/Images/soliders.jpeg" imageFileStart="src/resources/Images/start.jpeg" layoutX="78.0" onKeyPressed="#KeyPressed" width="522.0">
+      <Pane prefHeight="525.0" prefWidth="496.0" styleClass="background" BorderPane.alignment="CENTER">
+         <children>
+               <MazeDisplay fx:id="mazeDisplay" height="553.0"
+                            imageFileEnd="src/View/resources/Images/end.jpeg"
+                            imageFileNameCharacter="src/View/resources/Images/2.png"
+                            imageFileNameCharacter_1="src/View/resources/Images/1.png"
+                            imageFileNameCharacter_2="src/View/resources/Images/2.png"
+                            imageFileNameCharacter_3="src/View/resources/Images/3.png"
+                            imageFileNameCharacter_6="src/View/resources/Images/6.png"
+                            imageFileNameCharacter_9="src/View/resources/Images/9.png"
+                            imageFileNameCharacter_8="src/View/resources/Images/8.png"
+                            imageFileNameCharacter_7="src/View/resources/Images/7.png"
+                            imageFileNameCharacter_4="src/View/resources/Images/4.png"
+                            imageFileNameWall="src/View/resources/Images/soliders.jpeg"
+                            imageFileStart="src/View/resources/Images/start.jpeg"
+                            imageFileTrail="src/View/resources/Images/wall3.jpg"
+                            layoutX="-2.0" styleClass="background" width="499.0">
                <styleClass>
                   <String fx:value="root" />
                   <String fx:value="Label" />
-               </styleClass></MazeDisplay>
-           </children>
-       </Pane>
+               </styleClass>
+            </MazeDisplay>
+         </children>
+      </Pane>
    </center>
 </BorderPane>

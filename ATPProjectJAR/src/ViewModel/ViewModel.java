@@ -5,6 +5,7 @@ import Model.Model;
 import algorithms.search.Solution;
 import javafx.scene.input.KeyCode;
 
+import java.io.File;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -39,4 +40,24 @@ public class ViewModel extends Observable implements Observer {
     public int getCharacterPositionRow() {return this.model.getCharacterPositionRow();}
 
     public int getCharacterPositionColumn() {return this.model.getCharacterPositionCol();}
+
+    public int get_Start_Row_Pos() {
+        return this.model.get_Start_Row_Pos();
+    }
+
+    public int get_End_Row_Pos() {
+        return this.model.get_End_Row_Pos();
+    }
+
+    public int get_Start_Col_Pos() {
+        return this.model.get_Start_Col_Pos();
+    }
+
+    public int get_End_Col_Pos() {
+        return this.model.get_End_Col_Pos();
+    }
+
+    public void SaveMaze(File f){this.model.SaveMaze(f);}
+
+    public void loadMaze(File f) { this.model.loadMaze(f); }
 }

@@ -18,7 +18,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
 
-        Font.loadFont(Main.class.getResource("Game_of_Thrones.ttf").toExternalForm(), 12);
+        Font.loadFont(Main.class.getResource("resources/Font/Game_of_Thrones.ttf").toExternalForm(), 12);
 
         //ViewModel -> Model
         Model model = new Model();
@@ -27,43 +27,35 @@ public class Main extends Application {
 
         //Loading Main Windows
         primaryStage.setTitle("My Application!");
-        primaryStage.setWidth(800);
-        primaryStage.setHeight(700);
+       // primaryStage.setWidth(1000);
+        //primaryStage.setHeight(800);
         FXMLLoader fxmlLoader = new FXMLLoader();
         Parent root = fxmlLoader.load(getClass().getResource("MyView2.fxml").openStream());
-        Scene scene = new Scene(root, 800, 700);
+        Scene scene = new Scene(root, 900, 700);
         scene.getStylesheets().add(getClass().getResource("MainStyle.css").toExternalForm());
-
         primaryStage.setScene(scene);
+
 
         //View -> ViewModel
         MyViewController view = fxmlLoader.getController();
         view.initialize(viewModel,primaryStage,scene);
         viewModel.addObserver(view);
         //--------------
-        setStageCloseEvent(primaryStage, model);
+
+        view.setResizeEvent(scene);
+        view.addMouseScrolling(view.mazeDisplay);
+
+
+
+        setStageCloseEvent(view,primaryStage);
         //
         //Show the Main Window
         primaryStage.show();
     }
 
-    private void setStageCloseEvent(Stage primaryStage, Model model) {
-        primaryStage.setOnCloseRequest(event -> {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION,"Are you sure you want to exit?");
-            Optional<ButtonType> result = alert.showAndWait();
-            if (result.get() == ButtonType.OK){
-                // ... user chose OK
-                // Close the program properly
-                model.Close();
-            } else {
-                // ... user chose CANCEL or closed the dialog
-                event.consume();
-            }
-        });
+    private void setStageCloseEvent(MyViewController view,Stage primaryStage) {
+        primaryStage.setOnCloseRequest(event -> view.exit());
     }
-
-
-
 
     public static void main(String[] args) {
         launch(args);

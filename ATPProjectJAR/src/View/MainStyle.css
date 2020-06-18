@@ -2,10 +2,6 @@
     -fx-background-color: darkslategrey ;
 }
 
-
-
-
-
 Button {
     -fx-text-fill: white;
     -fx-font-family: "Game of Thrones";
@@ -26,26 +22,42 @@ Button:hover{
 @font-face {
 
     font-family:'Game of Thrones';
-    src: url("src/resources/Game_of_Thrones.ttf");
+    src: url("resources/Game_of_Thrones.ttf");
 }
 
 .Label {
     -fx-font-family: "Game of Thrones";
+    -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0);
 }
 .Adir {
 
-     -fx-background-image: url("daenerys.jpg");
+     -fx-background-image: url("resources/Images/daenerys.jpg");
     -fx-background-repeat: stretch;
-
     -fx-background-position: center center;
     -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0);
 }
-#pane{
+.help {
 
+    -fx-background-image: url("resources/Images/help2.PNG");
+    -fx-background-size: stretch ;
+    -fx-background-position: center center;
+    -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0);
+
+}
+
+.background {
+     -fx-background-image: url("resources/Images/Background.jpg");
+     -fx-background-size: stretch ;
+     -fx-background-position: center center;
+     -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0)
+}
+
+#pane{
     -fx-background-repeat: stretch;
     -fx-background-size: 900 506;
     -fx-background-position: center center;
     -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0);
+
 }
 
 

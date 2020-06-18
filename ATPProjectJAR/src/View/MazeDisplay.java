@@ -1,6 +1,5 @@
 package View;
 
-
 import algorithms.search.MazeState;
 import algorithms.search.Solution;
 import javafx.beans.property.SimpleStringProperty;
@@ -8,8 +7,10 @@ import javafx.beans.property.StringProperty;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
@@ -22,9 +23,24 @@ public class MazeDisplay extends Canvas {
     private StringProperty ImageFileStart = new SimpleStringProperty();
     private StringProperty ImageFileEnd = new SimpleStringProperty();
     private StringProperty ImageFileNameTrail=new SimpleStringProperty();
-    private algorithms.mazeGenerators.Maze Maze_obj;
+    private StringProperty ImageFileNameCharacter_1 = new SimpleStringProperty();
+    private StringProperty ImageFileNameCharacter_2 = new SimpleStringProperty();
+    private StringProperty ImageFileNameCharacter_3 = new SimpleStringProperty();
+    private StringProperty ImageFileNameCharacter_6 = new SimpleStringProperty();
+    private StringProperty ImageFileNameCharacter_9= new SimpleStringProperty();
+    private StringProperty ImageFileNameCharacter_8 = new SimpleStringProperty();
+    private StringProperty ImageFileNameCharacter_7 = new SimpleStringProperty();
+    private StringProperty ImageFileNameCharacter_4 = new SimpleStringProperty();
+    private Image characterImage;
     private Boolean solution_flag=false;
+    private Boolean Finish_flag=false;
     private Solution solution;
+    private KeyCode  direction=KeyCode.NUMPAD6;
+    private int StartRow;
+    private int StartCol;
+    private int EndRow;
+    private int EndCol;
+
 
 
     public void setSolution(Solution sol){this.solution=sol;}
@@ -32,50 +48,113 @@ public class MazeDisplay extends Canvas {
     public boolean getSolutionFlag(){return this.solution_flag;};
 
     public void setMaze(int[][] maze){
-        if(this.Maze_obj==null)
-            return;
         this.Maze=maze;
-        //this.characterPositionRows=this.Maze_obj.getStart_position().getRowIndex();
-       // this.characterPositionCol=this.Maze_obj.getStart_position().getColumnIndex();
-        draw();
-    }
-
-    public void setMazeObject(algorithms.mazeGenerators.Maze m){this.Maze_obj=m;}
-
-    public void characterPosition(int Row,int Col){
-        if(Row>0 && Row< this.Maze.length)
-            this.characterPositionRows=Row;
-        if(Col>0 && Col< this.Maze[0].length)
-            this.characterPositionCol=Col;
-    }
+    };
 
     public void setCharacterPosition(int row, int column) {
         characterPositionRows = row;
         characterPositionCol = column;
         draw();
     }
+    public void setDirection(KeyCode num){this.direction=num;}
 
-    private void draw(){
+    public void setMazeCharacter(){
+        switch (direction){
+
+            case NUMPAD1:
+
+                try {
+                    characterImage = new Image(new FileInputStream(ImageFileNameCharacter_1.get()));
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                break;
+
+            case NUMPAD2:
+                try {
+                    characterImage = new Image(new FileInputStream(ImageFileNameCharacter_2.get()));
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                break;
+
+            case NUMPAD3:
+                try {
+                    characterImage = new Image(new FileInputStream(ImageFileNameCharacter_3.get()));
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                break;
+
+            case NUMPAD4:
+                try {
+                    characterImage = new Image(new FileInputStream(ImageFileNameCharacter_4.get()));
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                break;
+
+            case NUMPAD6:
+                try {
+                    characterImage = new Image(new FileInputStream(ImageFileNameCharacter_6.get()));
+
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                break;
+
+            case NUMPAD7:
+                try {
+                   characterImage = new Image(new FileInputStream(ImageFileNameCharacter_7.get()));
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                break;
+
+            case NUMPAD8:
+                try {
+                    characterImage = new Image(new FileInputStream(ImageFileNameCharacter_8.get()));
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                break;
+
+            case NUMPAD9:
+                try {
+                    characterImage = new Image(new FileInputStream(ImageFileNameCharacter_9.get()));
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                break;
+
+        }
+
+    }
+
+    public void draw(){
         if (Maze != null) {
             double canvasHeight = getHeight();
             double canvasWidth = getWidth();
             double cellHeight = canvasHeight / Maze.length;
             double cellWidth = canvasWidth / Maze[0].length;
+            setMazeCharacter();
 
             try {
+
+                //Image characterImage = new Image(new FileInputStream(ImageFileNameCharacter.get()));
                 Image wallImage = new Image(new FileInputStream(ImageFileNameWall.get()));
-                Image characterImage = new Image(new FileInputStream(ImageFileNameCharacter.get()));
                 Image StartImage = new Image(new FileInputStream(ImageFileStart.get()));
                 Image EndtImage = new Image(new FileInputStream(ImageFileEnd.get()));
                 Image TrailImage = new Image(new FileInputStream(this.ImageFileNameTrail.get()));
+
                 GraphicsContext gc = getGraphicsContext2D();
                 gc.clearRect(0, 0, getWidth(), getHeight());
+
 
                 //Draw Maze
                 for (int i = 0; i < Maze[0].length; i++) {
                     for (int j = 0; j < Maze.length; j++) {
                         if (Maze[j][i] == 1) {
-                            //gc.fillRect(i * cellHeight, j * cellWidth, cellHeight, cellWidth);
                             gc.drawImage(wallImage, i * cellWidth, j * cellHeight, cellWidth, cellHeight);
                         }
                         if(Maze[j][i] == 0)
@@ -91,63 +170,24 @@ public class MazeDisplay extends Canvas {
                                 }
                             }
                         }
+
                     }
                 }
 
                         //Draw Character
                         //gc.setFill(Color.RED);
                         //gc.fillOval(characterPositionColumn * cellHeight, characterPositionRow * cellWidth, cellHeight, cellWidth);
-                        gc.drawImage(StartImage, this.Maze_obj.getStart_position().getColumnIndex() * cellWidth, this.Maze_obj.getStart_position().getRowIndex() * cellHeight, cellWidth, cellHeight);
+                        if(characterPositionCol==EndCol && characterPositionRows==EndRow){ this.Finish_flag=true;}
+                        else{this.Finish_flag=false;}
+                        gc.drawImage(StartImage, this.StartCol* cellWidth, this.StartRow * cellHeight, cellWidth, cellHeight);
                         gc.drawImage(characterImage, characterPositionCol * cellWidth, characterPositionRows * cellHeight, cellWidth, cellHeight);
-                        gc.drawImage(EndtImage, this.Maze_obj.getEnd_position().getColumnIndex() * cellWidth, this.Maze_obj.getEnd_position().getRowIndex() * cellHeight, cellWidth, cellHeight);
+                        gc.drawImage(EndtImage, this.EndCol * cellWidth, this.EndRow * cellHeight, cellWidth, cellHeight);
 
                     } catch(FileNotFoundException e){
-                        //e.printStackTrace();
+                        e.printStackTrace();
                     }
                 }
             }
-
-
-
-
-/*
-            if(this.Maze!=null){
-                double canvasHeight=getHeight();
-                double canvasWidth=getWidth();
-                double cellHeight=canvasHeight/this.Maze.length;
-                double cellWidth=canvasWidth/this.Maze[0].length;
-
-                try {
-                    Image wallImage = new Image(new FileInputStream(ImageFileNameWall.get()));
-                    Image characterImage = new Image(new FileInputStream(ImageFileNameCharacter.get()));
-                    Image StartImage = new Image(new FileInputStream(ImageFileStart.get()));
-                    Image EndtImage = new Image(new FileInputStream(ImageFileEnd.get()));
-                    GraphicsContext gc = getGraphicsContext2D();
-                    gc.clearRect(0, 0, getWidth(), getHeight());
-
-
-                    //Draw Maze
-                    System.out.println("XXXXXXXXXX");
-                    this.Maze_obj.print2();
-                    for (int i = 0; i < Maze.length; i++) {
-                        for (int j = 0; j < Maze[i].length; j++) {
-                            if (this.Maze[i][j] == 1) {
-                               // gc.fillRect(i * cellHeight, j * cellWidth, cellHeight, cellWidth);
-                                gc.drawImage(wallImage, i * cellHeight, j * cellWidth,cellHeight , cellHeight);
-                            }
-                        }
-                    }
-                    gc.drawImage(characterImage, characterPositionCol * cellHeight, this.characterPositionRows * cellWidth, cellHeight, cellWidth);
-                    //gc.drawImage(StartImage, this.Maze_obj.getStart_position().getColumnIndex() * cellHeight, this.Maze_obj.getStart_position().getRowIndex() * cellWidth, cellHeight, cellWidth);
-                    gc.drawImage(EndtImage, this.Maze_obj.getEnd_position().getColumnIndex()* cellHeight, this.Maze_obj.getEnd_position().getRowIndex() * cellWidth, cellHeight, cellWidth);
-
-
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-                */
-
-
 
     public String getImageFileNameWall() {
         return ImageFileNameWall.get();
@@ -160,6 +200,7 @@ public class MazeDisplay extends Canvas {
     public String getImageFileEnd() {
         return ImageFileEnd.get();
     }
+
     public String getImageFileTrail() {
         return this.ImageFileNameTrail.get();
     }
@@ -184,15 +225,75 @@ public class MazeDisplay extends Canvas {
         return ImageFileNameCharacter.get();
     }
 
-    public void setImageFileNameCharacter(String imageFileNameCharacter) {
-        this.ImageFileNameCharacter.set(imageFileNameCharacter);
+
+
+     public String getImageFileNameCharacter_1() {
+        return ImageFileNameCharacter_1.get();
+    }
+     public String getImageFileNameCharacter_2() {
+        return ImageFileNameCharacter_2.get();
+    }
+     public String getImageFileNameCharacter_3() {
+        return ImageFileNameCharacter_3.get();
+    }
+     public String getImageFileNameCharacter_6() {
+        return ImageFileNameCharacter_6.get();
+    }
+     public String getImageFileNameCharacter_9() {
+        return ImageFileNameCharacter_9.get();
+    }
+     public String getImageFileNameCharacter_8() {
+        return ImageFileNameCharacter_8.get();
+    }
+     public String getImageFileNameCharacter_7() {
+        return ImageFileNameCharacter_7.get();
+    }
+ public String getImageFileNameCharacter_4() {
+        return ImageFileNameCharacter_4.get();
     }
 
+    public void setImageFileNameCharacter(String imageFileNameCharacter) { this.ImageFileNameCharacter.set(imageFileNameCharacter); }
+    public void setImageFileNameCharacter_1(String imageFileNameCharacter_1) { this.ImageFileNameCharacter_1.set(imageFileNameCharacter_1); }
+    public void setImageFileNameCharacter_2(String imageFileNameCharacter_2) { this.ImageFileNameCharacter_2.set(imageFileNameCharacter_2); }
+    public void setImageFileNameCharacter_3(String imageFileNameCharacter_3) { this.ImageFileNameCharacter_3.set(imageFileNameCharacter_3); }
+    public void setImageFileNameCharacter_6(String imageFileNameCharacter_6) { this.ImageFileNameCharacter_6.set(imageFileNameCharacter_6); }
+    public void setImageFileNameCharacter_9(String imageFileNameCharacter_9) { this.ImageFileNameCharacter_9.set(imageFileNameCharacter_9); }
+    public void setImageFileNameCharacter_8(String imageFileNameCharacter_8) { this.ImageFileNameCharacter_8.set(imageFileNameCharacter_8); }
+    public void setImageFileNameCharacter_7(String imageFileNameCharacter_7) { this.ImageFileNameCharacter_7.set(imageFileNameCharacter_7); }
+    public void setImageFileNameCharacter_4(String imageFileNameCharacter_4) { this.ImageFileNameCharacter_4.set(imageFileNameCharacter_4); }
+
+
+
+    public void setStartRow(int startRow) { StartRow = startRow; }
+
+    public void setStartCol(int startCol) { StartCol = startCol; }
+
+    public void setEndRow(int endRow) { EndRow = endRow;
+    }
+
+    public void setEndCol(int endCol) {
+        EndCol = endCol;
+    }
 
     public void switch_Solution_status(){
         if(this.solution_flag==true)
             this.solution_flag=false;
         else
             this.solution_flag=true;
+    }
+
+    public void clear(){
+        this.Maze=null;
+        GraphicsContext gc = getGraphicsContext2D();
+        gc.clearRect(0, 0, getWidth(), getHeight());
+
+    }
+
+    public Boolean getFinish_flag() {
+        return Finish_flag;
+    }
+
+    public void setFinish_flag(Boolean finish_flag) {
+        Finish_flag = finish_flag;
     }
 }
