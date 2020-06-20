@@ -70,13 +70,10 @@
               <MenuItem fx:id="btn_properties" mnemonicParsing="false" onAction="#ShowProperties" text="Properties" />
             </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="About">
-               <items>
-              <MenuItem mnemonicParsing="false" onAction="#about" text="About" />
-               </items></Menu>
+          <Menu mnemonicParsing="false" text="About" />
             <Menu mnemonicParsing="false" text="Help">
                <items>
-                  <MenuItem mnemonicParsing="false" onAction="#help" text="information" />
+              <MenuItem mnemonicParsing="false" onAction="#help" text="information" />
                </items></Menu>
             <Menu mnemonicParsing="false" text="Exit">
                <items>
@@ -87,22 +84,23 @@
       </MenuBar>
    </top>
    <center>
-      <Pane styleClass="background" BorderPane.alignment="CENTER">
+      <Pane prefHeight="525.0" prefWidth="496.0" styleClass="background" BorderPane.alignment="CENTER">
          <children>
-               <MazeDisplay fx:id="mazeDisplay" height="670.0" imageFileEnd="src/View/resources/Images/end.jpeg"
+               <MazeDisplay fx:id="mazeDisplay" height="553.0"
+                            imageFileEnd="src/View/resources/Images/end.jpeg"
                             imageFileNameCharacter="src/View/resources/Images/2.png"
                             imageFileNameCharacter_1="src/View/resources/Images/1.png"
                             imageFileNameCharacter_2="src/View/resources/Images/2.png"
                             imageFileNameCharacter_3="src/View/resources/Images/3.png"
-                            imageFileNameCharacter_4="src/View/resources/Images/4.png"
                             imageFileNameCharacter_6="src/View/resources/Images/6.png"
-                            imageFileNameCharacter_7="src/View/resources/Images/7.png"
-                            imageFileNameCharacter_8="src/View/resources/Images/8.png"
                             imageFileNameCharacter_9="src/View/resources/Images/9.png"
+                            imageFileNameCharacter_8="src/View/resources/Images/8.png"
+                            imageFileNameCharacter_7="src/View/resources/Images/7.png"
+                            imageFileNameCharacter_4="src/View/resources/Images/4.png"
                             imageFileNameWall="src/View/resources/Images/soliders.jpeg"
-                            imageFileSol="src/View/resources/Images/fire.png"
                             imageFileStart="src/View/resources/Images/start.jpeg"
-                            imageFileTrail="src/View/resources/Images/wall3.jpg" width="620.0">
+                            imageFileTrail="src/View/resources/Images/wall3.jpg"
+                            layoutX="-2.0" styleClass="background" width="499.0">
                <styleClass>
                   <String fx:value="root" />
                   <String fx:value="Label" />

@@ -45,25 +45,6 @@ Button:hover{
 
 }
 
-.adir {
-
-    -fx-background-image: url("resources/Images/Ben.jpeg");
-    -fx-background-size: stretch ;
-    -fx-background-position: center center;
-
-
-}
-.ben {
-
-    -fx-background-image: url("resources/Images/Adir.jpeg");
-    -fx-background-size: stretch ;
-    -fx-background-position: center center;
-
-
-}
-
-
-
 .background {
      -fx-background-image: url("resources/Images/Background.jpg");
      -fx-background-size: stretch ;

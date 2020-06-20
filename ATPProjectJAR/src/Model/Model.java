@@ -89,6 +89,7 @@ public class Model extends Observable implements IModel {
 
     public Solution GenerateSolution(){
         this.solve=this.Server_generator.Solve_operate();
+
         return this.solve;
     }
 
