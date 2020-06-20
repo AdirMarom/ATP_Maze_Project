@@ -25,7 +25,7 @@ public class ViewModel extends Observable implements Observer {
         }
     }
 
-    public Solution getSolution(){return this.model.GenerateSolution();}
+    public Solution getSolution(){return this.model.getSolution();}
 
     public void generateSolution(){this.model.GenerateSolution();}
 

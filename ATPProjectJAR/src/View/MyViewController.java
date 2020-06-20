@@ -1,6 +1,7 @@
 package View;
 
 import ViewModel.ViewModel;
+import javafx.animation.PauseTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -10,13 +11,18 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.ScrollEvent;
+import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+import sun.awt.Mutex;
 
 import java.awt.event.ActionEvent;
 import java.io.*;
@@ -30,12 +36,13 @@ public class MyViewController implements Observer,IView {
     public javafx.scene.control.Button btn_generateMaze;
     public javafx.scene.control.Button btn_solveMaze;
     public javafx.scene.control.MenuItem btn_properties;
+    public javafx.scene.image.ImageView image_ben;
+    public javafx.scene.image.ImageView image_adir;
 
     private boolean flag=false;
     private boolean playing=false;
     private Media sound;
     private MediaPlayer mediaPlayer;
-    public javafx.scene.layout.VBox sideManu;
     public javafx.scene.layout.BorderPane myBord;
 
     @FXML
@@ -146,7 +153,7 @@ public class MyViewController implements Observer,IView {
             PlaySong("src/View/resources/Music/game_song.mp3");
         if(this.mazeDisplay.getFinish_flag()==true) {
             this.mediaPlayer.stop();
-            PlaySong("src/View/resources/Music/victory_song.mp3");
+          //  PlaySong("src/View/resources/Music/victory_song.mp3");
             Finish();
         }
         this.flag=true;
@@ -167,14 +174,18 @@ public class MyViewController implements Observer,IView {
             mazeDisplay.setSolution(viewModel.getSolution());
         }
         mazeDisplay.switch_Solution_status();
+        displayMaze(viewModel.getMaze());
     }
 
     public void ClearMaze(){
 
         if(playing){
+            this.txtfld_columnsNum.clear();
+            this.txtfld_rowsNum.clear();
             this.mazeDisplay.clear();
             btn_generateMaze.setDisable(false);
-            this.btn_solveMaze.setDisable(true);
+            this.btn_solveMaze.setDisable(false);
+
         }
 
     }
@@ -258,7 +269,7 @@ public class MyViewController implements Observer,IView {
 
     public void addMouseScrolling(Node node) {
         node.setOnScroll((ScrollEvent event) -> {
-            // Adjust the zoom factor as per your requirement
+
             double zoomFactor = 1.05;
             double deltaY = event.getDeltaY();
             if (deltaY < 0){
@@ -271,7 +282,27 @@ public class MyViewController implements Observer,IView {
 
     public void Finish() {
 
-        try {
+        Stage newWindow = new Stage();
+        StackPane root = new StackPane();
+        MediaPlayer player = new MediaPlayer(new Media(getClass().getResource("finish_video.mp4").toExternalForm()));
+        MediaView mediaView = new MediaView(player);
+        root.getChildren().add(mediaView);
+        Scene scene = new Scene(root, 640, 360);
+        newWindow.setScene(scene);
+        newWindow.show();
+        player.play();
+        PauseTransition delay = new PauseTransition(Duration.seconds(13));
+        delay.setOnFinished( event -> newWindow.close() );
+        delay.play();
+        ClearMaze();
+
+
+
+            /*
+            MediaView video=new MediaView();
+            video
+
+
             // New window (Stage)
             Stage newWindow = new Stage();
             newWindow.setResizable(false);
@@ -281,6 +312,34 @@ public class MyViewController implements Observer,IView {
             Parent root = fxmlLoader.load(getClass().getResource("Finish.fxml").openStream());
             Scene scene = new Scene(root, 600, 600);
             scene.getStylesheets().add(getClass().getResource("MainStyle.css").toExternalForm());
+            Image i = new Image(new File("View/resources/Images/giphy.gif").toURI().toString());
+            this.image_adir.setImage(i);
+            newWindow.setScene(scene);
+            newWindow.initModality(Modality.APPLICATION_MODAL);
+            // Set position of second window, related to primary window.
+
+            newWindow.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        */
+    }
+
+    public void about() {
+
+        try {
+            // New window (Stage)
+            Stage newWindow = new Stage();
+            newWindow.setResizable(false);
+            newWindow.setTitle("About");
+
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            Parent root = fxmlLoader.load(getClass().getResource("About.fxml").openStream());
+            Scene scene = new Scene(root, 600, 300);
+            scene.getStylesheets().add(getClass().getResource("AboutStyle.css").toExternalForm());
+
+            //scene.getStylesheets().add(getClass().getResource("MainStyle.css").toExternalForm());
             newWindow.setScene(scene);
             newWindow.initModality(Modality.APPLICATION_MODAL);
             // Set position of second window, related to primary window.
@@ -291,7 +350,5 @@ public class MyViewController implements Observer,IView {
             e.printStackTrace();
         }
     }
-
-
 
 }
