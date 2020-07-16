@@ -21,11 +21,20 @@ public class Server_Operation {
     private Server solveSearchProblemServer;
     private Solution solve;
 
+    /**
+     *
+     * @param row the number of the rows in the maze
+     * @param col the number of the columns in the maze
+     */
     public Server_Operation(int row,int col){
         this.Size_Of_Row=row;
         this.Size_Of_Col=col;
     }
 
+    /***
+     * this function open a new server and with him generate the requird maze
+     * @return a new maze
+     */
         public Maze Generate_Operate() {
             mazeGeneratingServer = new Server(5400, 1000, new ServerStrategyGenerateMaze());
             mazeGeneratingServer.start();
@@ -34,6 +43,10 @@ public class Server_Operation {
             return this.maze;
         }
 
+    /**
+     * this function return the solution of the maze by the server with ServerStrategySolveSearchProblem
+     * @return solution
+     */
         public Solution Solve_operate(){
 
             solveSearchProblemServer = new Server(5401, 1000, new ServerStrategySolveSearchProblem());
@@ -44,6 +57,10 @@ public class Server_Operation {
 
         }
 
+    /**
+     * this function request from the the server to generate a new maze by opening a client to request it.
+     *
+     */
         private void CommunicateWithServer_MazeGenerating() {
             try {
                 Client client = new Client(InetAddress.getLocalHost(), 5400, new IClientStrategy() {
@@ -74,7 +91,10 @@ public class Server_Operation {
             }
 
         }
-
+    /**
+     * this function request from the the server a solution from existing maze by opening a client to request it.
+     *
+     */
     private void CommunicateWithServer_SolveSearchProblem() {
         try {
             Client client = new Client(InetAddress.getLocalHost(), 5401, new IClientStrategy() {
@@ -122,15 +142,23 @@ public class Server_Operation {
     public Maze getMaze() {
         return maze;
     }
-
+    /**
+     * setting the maze field
+     * @param maze
+     */
     public void setMaze(Maze maze) {
         this.maze = maze;
     }
+
 
     public Solution getSolve() {
         return solve;
     }
 
+    /**
+     * setting the solve field
+     * @param solve
+     */
     public void setSolve(Solution solve) {
         this.solve = solve;
     }

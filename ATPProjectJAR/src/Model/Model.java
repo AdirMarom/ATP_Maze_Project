@@ -25,7 +25,10 @@ public class Model extends Observable implements IModel {
     public Model() {
 
     }
-
+    /***
+     *  the function loading a existing maze and notify the observers on the model
+     * @param f the maze we should to open
+     */
     public void loadMaze(File f)  {
 
         FileInputStream loadFile = null;
@@ -45,7 +48,10 @@ public class Model extends Observable implements IModel {
             e.printStackTrace();
         }
     }
-
+    /**
+     * this function save a new maze
+     * @param f the maze we want to save
+     */
     @Override
     public void SaveMaze(File f) {
         if(f==null)
@@ -61,7 +67,11 @@ public class Model extends Observable implements IModel {
             var11.printStackTrace();
         }
     }
-
+    /**
+     * this function generating a new maze with the server
+     * @param Rows the number of the rows in the maze
+     * @param Column the number of the columns in the maze
+     */
     @Override
     public void GenerateMaze(int Rows, int Column) {
         this.Server_generator=new Server_Operation(Rows,Column);
@@ -72,7 +82,6 @@ public class Model extends Observable implements IModel {
         characterPositionColumn=this.G_maze.getStart_position().getColumnIndex();
         this.numOfRow=this.MatrixMaze.length;
         this.numOfCol=this.MatrixMaze[0].length;
-        this.G_maze.print2();
         setChanged(); //Raise a flag that I have changed
         notifyObservers();
     }
@@ -86,10 +95,12 @@ public class Model extends Observable implements IModel {
     public void MoveCharacter(KeyCode Movement) {
 
     }
-
+    /**
+     * this function generating a solution with the server
+     * @return the solve of the maze
+     */
     public Solution GenerateSolution(){
         this.solve=this.Server_generator.Solve_operate();
-
         return this.solve;
     }
 
@@ -101,10 +112,12 @@ public class Model extends Observable implements IModel {
 
     public algorithms.mazeGenerators.Maze getMazeObj(){return this.G_maze;}
 
+    /**
+     * this function in charge of the movement of the character ,chack if the next move is legal.
+     * @param movement the button pressed by user
+     */
     @Override
     public void moveCharacter(KeyCode movement) {
-        this.G_maze.print2();
-        System.out.println("{"+characterPositionRow+","+characterPositionColumn+"}");
 
         Position next_pos=new algorithms.mazeGenerators.Position(0,0) ;
         switch (movement) {

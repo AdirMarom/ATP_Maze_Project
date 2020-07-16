@@ -27,10 +27,8 @@ public class Main extends Application {
 
         //Loading Main Windows
         primaryStage.setTitle("My Application!");
-       // primaryStage.setWidth(1000);
-        //primaryStage.setHeight(800);
         FXMLLoader fxmlLoader = new FXMLLoader();
-        Parent root = fxmlLoader.load(getClass().getResource("MyView2.fxml").openStream());
+        Parent root = fxmlLoader.load(getClass().getResource("MyView.fxml").openStream());
         Scene scene = new Scene(root, 900, 700);
         scene.getStylesheets().add(getClass().getResource("MainStyle.css").toExternalForm());
         primaryStage.setScene(scene);

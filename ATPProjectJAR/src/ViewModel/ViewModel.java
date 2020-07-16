@@ -9,6 +9,13 @@ import java.io.File;
 import java.util.Observable;
 import java.util.Observer;
 
+/**
+ * this class implements Observer on  the View
+ * this class function as connector between
+ * model part to the view part
+ *
+ */
+
 public class ViewModel extends Observable implements Observer {
 
     private IModel model;
@@ -17,6 +24,11 @@ public class ViewModel extends Observable implements Observer {
         this.model = model;
     }
 
+    /**
+     * in case the model become  to change this function notify the observers
+     * @param o
+     * @param arg
+     */
     @Override
     public void update(Observable o, Object arg) {
         if (o==model){
@@ -25,15 +37,13 @@ public class ViewModel extends Observable implements Observer {
         }
     }
 
-    public Solution getSolution(){return this.model.GenerateSolution();}
+    public Solution getSolution(){return this.model.getSolution();}
 
     public void generateSolution(){this.model.GenerateSolution();}
 
     public void generateMaze(int row ,int col){this.model.GenerateMaze(row,col);}
 
     public int[][] getMaze(){return model.getMaze();}
-
-    public algorithms.mazeGenerators.Maze getMazeObj(){return this.model.getMazeObj();}
 
     public void moveCharacter(KeyCode movement) {model.moveCharacter(movement);}
 

@@ -1,6 +1,7 @@
 package View;
 
 import ViewModel.ViewModel;
+import javafx.animation.PauseTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -12,16 +13,22 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.ScrollEvent;
+import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
-import java.awt.event.ActionEvent;
 import java.io.*;
 import java.util.*;
 
+/***
+ * class responsible for function that connect to
+ * the external side of this app
+ */
 public class MyViewController implements Observer,IView {
 
     public MazeDisplay mazeDisplay;
@@ -30,12 +37,12 @@ public class MyViewController implements Observer,IView {
     public javafx.scene.control.Button btn_generateMaze;
     public javafx.scene.control.Button btn_solveMaze;
     public javafx.scene.control.MenuItem btn_properties;
+    public javafx.scene.image.ImageView image_adir;
 
-    private boolean flag=false;
+    private boolean Song_flag =false;
     private boolean playing=false;
     private Media sound;
     private MediaPlayer mediaPlayer;
-    public javafx.scene.layout.VBox sideManu;
     public javafx.scene.layout.BorderPane myBord;
 
     @FXML
@@ -52,14 +59,23 @@ public class MyViewController implements Observer,IView {
     }
 
     @Override
+
+    /**
+     * update the changes in maze:
+     * character location ,display solution....
+     */
     public void update(Observable o, Object arg) {
         if (o == viewModel) {
             displayMaze(viewModel.getMaze());
-            btn_generateMaze.setDisable(false);
+            if(playing)
+                btn_generateMaze.setDisable(true);
 
         }
     }
 
+    /**
+     * allow to load Saved maze from file.
+     */
     public void loadMaze() {
         FileChooser fc = new FileChooser();
         fc.setTitle("Load maze");
@@ -74,18 +90,31 @@ public class MyViewController implements Observer,IView {
 
     }
 
+    /**
+     * allow to save Saved maze from file.
+     */
     public void saveMaze() {
-        FileChooser fc = new FileChooser();
-        fc.setTitle("Save maze");
-        FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("Maze file (*.tmp)", ".tmp");
-        fc.getExtensionFilters().add(extensionFilter);
-        fc.setInitialDirectory(new File("src/Saved_Maze"));
-        File chosen = fc.showSaveDialog((Stage)mazeDisplay.getScene().getWindow());
-        if (chosen != null) {
-            viewModel.SaveMaze(chosen);
+        if(playing){
+            FileChooser fc = new FileChooser();
+            fc.setTitle("Save maze");
+            FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("Maze file (*.tmp)", ".tmp");
+            fc.getExtensionFilters().add(extensionFilter);
+            fc.setInitialDirectory(new File("src/Saved_Maze"));
+            File chosen = fc.showSaveDialog((Stage)mazeDisplay.getScene().getWindow());
+            if (chosen != null) {
+                viewModel.SaveMaze(chosen);
+            }
         }
+        else {
+            warning("warning", "cannot save empty maze!");
+
+        }
+
     }
 
+    /**
+     * display on new windows Details about the game
+     */
     public void help() {
 
         try {
@@ -101,7 +130,6 @@ public class MyViewController implements Observer,IView {
             newWindow.setScene(scene);
             newWindow.initModality(Modality.APPLICATION_MODAL);
             // Set position of second window, related to primary window.
-
             newWindow.show();
 
         } catch (IOException e) {
@@ -109,6 +137,9 @@ public class MyViewController implements Observer,IView {
         }
     }
 
+    /**
+     * display information about algorithms , number of threads
+     */
     public void ShowProperties(){
         try{
             InputStream input = new FileInputStream("config/config.properties");
@@ -142,17 +173,23 @@ public class MyViewController implements Observer,IView {
         int characterPositionRow = viewModel.getCharacterPositionRow();
         int characterPositionColumn = viewModel.getCharacterPositionColumn();
         mazeDisplay.setCharacterPosition(characterPositionRow, characterPositionColumn);
-        if(!flag)
+        this.playing = true;
+        this.btn_solveMaze.setDisable(false);
+        if (!Song_flag){
             PlaySong("src/View/resources/Music/game_song.mp3");
+            this.Song_flag = true;
+    }
         if(this.mazeDisplay.getFinish_flag()==true) {
             this.mediaPlayer.stop();
-            PlaySong("src/View/resources/Music/victory_song.mp3");
+          //  PlaySong("src/View/resources/Music/victory_song.mp3");
             Finish();
         }
-        this.flag=true;
-        this.btn_solveMaze.setDisable(false);
+
     }
 
+    /**
+     * catch when the player press on keypad
+     */
     public void KeyPressed(KeyEvent keyEvent) {
         this.mazeDisplay.setDirection(keyEvent.getCode());
         viewModel.moveCharacter(keyEvent.getCode());
@@ -161,21 +198,33 @@ public class MyViewController implements Observer,IView {
 
     }
 
+    /**
+     * display the solution for the Maze
+     */
     public void generateSolution(){
         if(!mazeDisplay.getSolutionFlag()){
             viewModel.generateSolution();
             mazeDisplay.setSolution(viewModel.getSolution());
         }
         mazeDisplay.switch_Solution_status();
+        displayMaze(viewModel.getMaze());
     }
 
+    /**
+     * clean the information
+     * turn off buttons
+     */
     public void ClearMaze(){
 
         if(playing){
+            this.txtfld_columnsNum.clear();
+            this.txtfld_rowsNum.clear();
             this.mazeDisplay.clear();
             btn_generateMaze.setDisable(false);
             this.btn_solveMaze.setDisable(true);
+            playing=false;
         }
+
 
     }
 
@@ -191,18 +240,23 @@ public class MyViewController implements Observer,IView {
         }
     }
 
+    /**
+     * catch the size of the maze
+     * generate Maze
+     * check Data
+     */
     public void generateMaze() {
 
         String S_ROW=txtfld_rowsNum.getText();
         String S_COL= txtfld_columnsNum.getText();
         if(!isNumeric(S_COL) || !isNumeric(S_ROW)) {
-            warning("WRONG INPUT", "THE MAZE DIMENSIONS INVALID!"+"\n"+"\n"+"PLEASE CHOOSE POSITIVE NUMBER");
+            warning("WRONG INPUT", "Maze dimensions invalid! choose number between 2 to 500");
             return;
         }
         int heigth = Integer.valueOf(S_ROW);
         int width = Integer.valueOf(txtfld_columnsNum.getText());
         if(heigth<2 || width<2){
-            warning("WRONG INPUT", "THE MAZE DIMENSIONS INVALID!"+"\n"+"\n"+"PLEASE CHOOSE POSITIVE NUMBER");
+            warning("WRONG INPUT", "Maze dimensions invalid! choose number between 2 to 500");
             return;
         }
 
@@ -225,11 +279,14 @@ public class MyViewController implements Observer,IView {
         }
     }
 
+    /**
+     * rise custom alert
+     */
     public void warning(String title,String contentText){
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setContentText(contentText);
-
+        alert.getDialogPane().getStylesheets().add(getClass().getResource("Alert.css").toExternalForm());
         alert.show();
     }
 
@@ -258,7 +315,7 @@ public class MyViewController implements Observer,IView {
 
     public void addMouseScrolling(Node node) {
         node.setOnScroll((ScrollEvent event) -> {
-            // Adjust the zoom factor as per your requirement
+
             double zoomFactor = 1.05;
             double deltaY = event.getDeltaY();
             if (deltaY < 0){
@@ -269,18 +326,48 @@ public class MyViewController implements Observer,IView {
         });
     }
 
+    /**
+     *
+     */
     public void Finish() {
+
+        Stage newWindow = new Stage();
+        StackPane root = new StackPane();
+        MediaPlayer player = new MediaPlayer(new Media(getClass().getResource("finish_video.mp4").toExternalForm()));
+        MediaView mediaView = new MediaView(player);
+        root.getChildren().add(mediaView);
+        Scene scene = new Scene(root, 640, 360);
+        newWindow.setScene(scene);
+        newWindow.show();
+        player.play();
+        PauseTransition delay = new PauseTransition(Duration.seconds(13));
+        newWindow.setOnCloseRequest(event ->  player.stop());
+        delay.setOnFinished( event -> newWindow.close() );
+        delay.play();
+        ClearMaze();
+        this.Song_flag=false;
+
+
+
+    }
+
+    /**
+     * display on new windows Details about the programmers
+     */
+    public void about() {
 
         try {
             // New window (Stage)
             Stage newWindow = new Stage();
             newWindow.setResizable(false);
-            newWindow.setTitle("Finish");
+            newWindow.setTitle("About");
 
             FXMLLoader fxmlLoader = new FXMLLoader();
-            Parent root = fxmlLoader.load(getClass().getResource("Finish.fxml").openStream());
-            Scene scene = new Scene(root, 600, 600);
-            scene.getStylesheets().add(getClass().getResource("MainStyle.css").toExternalForm());
+            Parent root = fxmlLoader.load(getClass().getResource("About.fxml").openStream());
+            Scene scene = new Scene(root, 600, 300);
+            scene.getStylesheets().add(getClass().getResource("AboutStyle.css").toExternalForm());
+
+            //scene.getStylesheets().add(getClass().getResource("MainStyle.css").toExternalForm());
             newWindow.setScene(scene);
             newWindow.initModality(Modality.APPLICATION_MODAL);
             // Set position of second window, related to primary window.
@@ -291,7 +378,5 @@ public class MyViewController implements Observer,IView {
             e.printStackTrace();
         }
     }
-
-
 
 }

@@ -31,6 +31,7 @@ public class MazeDisplay extends Canvas {
     private StringProperty ImageFileNameCharacter_8 = new SimpleStringProperty();
     private StringProperty ImageFileNameCharacter_7 = new SimpleStringProperty();
     private StringProperty ImageFileNameCharacter_4 = new SimpleStringProperty();
+    private StringProperty ImageFileSol=new SimpleStringProperty();
     private Image characterImage;
     private Boolean solution_flag=false;
     private Boolean Finish_flag=false;
@@ -51,13 +52,23 @@ public class MazeDisplay extends Canvas {
         this.Maze=maze;
     };
 
+    /**
+     * setting the character position
+     * @param row row index
+     * @param column column index
+     */
     public void setCharacterPosition(int row, int column) {
         characterPositionRows = row;
         characterPositionCol = column;
         draw();
     }
+
+
     public void setDirection(KeyCode num){this.direction=num;}
 
+    /**
+     * spin the character on the board in accordnce the user button pressed
+     */
     public void setMazeCharacter(){
         switch (direction){
 
@@ -131,6 +142,9 @@ public class MazeDisplay extends Canvas {
 
     }
 
+    /**
+     * this function drawing the maze on the canvas
+     */
     public void draw(){
         if (Maze != null) {
             double canvasHeight = getHeight();
@@ -146,10 +160,9 @@ public class MazeDisplay extends Canvas {
                 Image StartImage = new Image(new FileInputStream(ImageFileStart.get()));
                 Image EndtImage = new Image(new FileInputStream(ImageFileEnd.get()));
                 Image TrailImage = new Image(new FileInputStream(this.ImageFileNameTrail.get()));
-
+                Image SolImage = new Image(new FileInputStream(this.ImageFileSol.get()));
                 GraphicsContext gc = getGraphicsContext2D();
                 gc.clearRect(0, 0, getWidth(), getHeight());
-
 
                 //Draw Maze
                 for (int i = 0; i < Maze[0].length; i++) {
@@ -160,12 +173,10 @@ public class MazeDisplay extends Canvas {
                         if(Maze[j][i] == 0)
                             gc.drawImage(TrailImage, i * cellWidth, j * cellHeight, cellWidth, cellHeight);
                         if (this.solution_flag) {
-
                             for (int x = 0; x < this.solution.getSolutionPath().size(); x++) {
                                 MazeState MazeStep = (MazeState) (this.solution.getSolutionPath().get(x));
                                 if (MazeStep.getRowIndex() == j && MazeStep.getColIndex() == i) {
-                                    gc.setFill(Color.YELLOW);
-                                    gc.fillOval(i * cellWidth, j * cellHeight,cellWidth,cellHeight);
+                                    gc.drawImage(SolImage, i * cellWidth, j * cellHeight, cellWidth, cellHeight);
                                     break;
                                 }
                             }
@@ -225,33 +236,46 @@ public class MazeDisplay extends Canvas {
         return ImageFileNameCharacter.get();
     }
 
-
-
      public String getImageFileNameCharacter_1() {
         return ImageFileNameCharacter_1.get();
     }
+
      public String getImageFileNameCharacter_2() {
         return ImageFileNameCharacter_2.get();
     }
+
      public String getImageFileNameCharacter_3() {
         return ImageFileNameCharacter_3.get();
     }
+
      public String getImageFileNameCharacter_6() {
         return ImageFileNameCharacter_6.get();
     }
+
      public String getImageFileNameCharacter_9() {
         return ImageFileNameCharacter_9.get();
     }
+
      public String getImageFileNameCharacter_8() {
         return ImageFileNameCharacter_8.get();
     }
+
      public String getImageFileNameCharacter_7() {
         return ImageFileNameCharacter_7.get();
     }
+
+    public String getImageFileSol() {
+        return ImageFileSol.get();
+    }
+
  public String getImageFileNameCharacter_4() {
         return ImageFileNameCharacter_4.get();
     }
 
+    /**
+     *
+     * setting the imafe positions of the dragon character
+     */
     public void setImageFileNameCharacter(String imageFileNameCharacter) { this.ImageFileNameCharacter.set(imageFileNameCharacter); }
     public void setImageFileNameCharacter_1(String imageFileNameCharacter_1) { this.ImageFileNameCharacter_1.set(imageFileNameCharacter_1); }
     public void setImageFileNameCharacter_2(String imageFileNameCharacter_2) { this.ImageFileNameCharacter_2.set(imageFileNameCharacter_2); }
@@ -261,8 +285,7 @@ public class MazeDisplay extends Canvas {
     public void setImageFileNameCharacter_8(String imageFileNameCharacter_8) { this.ImageFileNameCharacter_8.set(imageFileNameCharacter_8); }
     public void setImageFileNameCharacter_7(String imageFileNameCharacter_7) { this.ImageFileNameCharacter_7.set(imageFileNameCharacter_7); }
     public void setImageFileNameCharacter_4(String imageFileNameCharacter_4) { this.ImageFileNameCharacter_4.set(imageFileNameCharacter_4); }
-
-
+    public void setImageFileSol(String imageFileSol) { this.ImageFileSol.set(imageFileSol); }
 
     public void setStartRow(int startRow) { StartRow = startRow; }
 
@@ -275,6 +298,9 @@ public class MazeDisplay extends Canvas {
         EndCol = endCol;
     }
 
+    /**
+     * this function in charge in case that the user prresed on solution button
+     */
     public void switch_Solution_status(){
         if(this.solution_flag==true)
             this.solution_flag=false;
@@ -282,8 +308,14 @@ public class MazeDisplay extends Canvas {
             this.solution_flag=true;
     }
 
+    /**
+     * this function clear the canvas from the maze
+     */
     public void clear(){
         this.Maze=null;
+        this.solution=null;
+        this.Finish_flag=false;
+        this.solution_flag=false;
         GraphicsContext gc = getGraphicsContext2D();
         gc.clearRect(0, 0, getWidth(), getHeight());
 
@@ -293,6 +325,10 @@ public class MazeDisplay extends Canvas {
         return Finish_flag;
     }
 
+    /**
+     * this function update in case the character arrived to finish point and switch the flag.
+     * @param finish_flag
+     */
     public void setFinish_flag(Boolean finish_flag) {
         Finish_flag = finish_flag;
     }
